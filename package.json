@@ -8,6 +8,8 @@
     "dev": "nodemon dist/index"
   },
   "dependencies": {
+    "@types/cors": "^2.8.12",
+    "cors": "^2.8.5",
     "dic-ioc": "^0.1.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
