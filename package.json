@@ -1,0 +1,22 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Valentin Valverde",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon dist/index"
+  },
+  "dependencies": {
+    "dic-ioc": "^0.1.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jest": "^27.2.4",
+    "nodemailer": "^6.6.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.10.2",
+    "@types/nodemailer": "^6.4.4"
+  }
+}
