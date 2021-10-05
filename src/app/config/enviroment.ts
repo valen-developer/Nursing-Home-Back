@@ -1,3 +1,6 @@
+import { loadEnv } from '../../helpers/loadENV';
+loadEnv();
+
 export const enviroment = {
   db: {
     uri: process.env.DATABASE_URI || `mongodb://localhost:27017/nursinghome`,
@@ -7,7 +10,7 @@ export const enviroment = {
     password: process.env.DATABASE_PASSWORD || 'admin',
   },
   mailer: {
-    mail: process.env.NEWSPAPER_MAIL || 'email@email.com',
+    mail: process.env.APP_MAIL || 'email@email.com',
     password: process.env.MAIL_PASSWORD || 'pass',
     host: process.env.MAIL_HOST || 'gmail',
     port: process.env.MAIL_PORT || 553,
@@ -16,5 +19,5 @@ export const enviroment = {
     seed: process.env.TOKENSEED || 'Una seed',
     expireIn: process.env.TOKENEXPIRE || '30d',
   },
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || '',
 };
