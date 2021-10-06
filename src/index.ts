@@ -3,6 +3,7 @@ import { json, urlencoded } from 'express';
 
 import { enviroment } from './app/config/enviroment';
 import { getContainer } from './app/dic/getContainer';
+import { router } from './app/routes/index.routing';
 import { Server } from './app/server';
 
 export { mongooseConnection } from './helpers/connectMongoDB';
@@ -16,5 +17,7 @@ server.app.use(json());
 server.app.use(cors());
 
 export const container = getContainer();
+
+server.app.use('/api', router);
 
 server.start();

@@ -10,6 +10,7 @@ export const enviroment = {
     password: process.env.DATABASE_PASSWORD || 'admin',
   },
   mailer: {
+    appMail: process.env.APP_MAIL || 'email@email.com',
     mail: process.env.APP_MAIL || 'email@email.com',
     password: process.env.MAIL_PASSWORD || 'pass',
     host: process.env.MAIL_HOST || 'gmail',

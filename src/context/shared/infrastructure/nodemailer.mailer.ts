@@ -15,18 +15,16 @@ export class NodeMailer implements Mailer {
     to: string,
     subject: string,
     html: string
-  ): Promise<boolean | void> {
-    try {
-      const resp = await this.transporter.sendMail({
+  ): Promise<boolean> {
+    return await this.transporter
+      .sendMail({
         from: from,
         to: to,
         subject,
         html,
-      });
-    } catch (error) {
-      console.log(error);
-      throw new Error('server error');
-    }
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 }
 
