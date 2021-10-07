@@ -15,17 +15,18 @@ export class LoginUser {
   public async login(email: string, password: string): Promise<User> {
     const user = await this.userFinder.getByEmail(email);
 
-    this.saveOnCache(user);
-
     const isValid = this.crypt.compare(password, user.password.value ?? 'pass');
-    if (!isValid)
+    if (!user.validated || !isValid)
       throw new HTTPException('LoginUser', 'email or password invalid', 401);
 
+    this.saveOnCache(user);
     return user;
   }
 
   private async saveOnCache(user: User): Promise<void> {
-    this.userCacheRepository.setUser(user);
+    const isSaved = await this.userCacheRepository.setUser(user);
+
+    console.log('isSaved: ', isSaved);
   }
 }
 

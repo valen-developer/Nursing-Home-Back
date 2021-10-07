@@ -40,8 +40,6 @@ export class MongoUserRepository implements UserRepository {
   }
 
   public async update(user: User): Promise<User> {
-    console.log(user.toObject());
-
     try {
       await UserMongoModel.findOneAndUpdate(
         { uuid: user.uuid.value },

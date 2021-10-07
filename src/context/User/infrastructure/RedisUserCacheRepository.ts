@@ -6,6 +6,8 @@ export class RedisUserCacheRepository implements UserCacheRepository {
   public getUserByEmail(uuid: string): Promise<UserObject | null> {
     return new Promise((resolve, reject) => {
       redisClient.get(uuid, (err: any, data: any) => {
+        console.log(err);
+
         if (err || !data) resolve(null);
 
         if (data) resolve(JSON.parse(data));

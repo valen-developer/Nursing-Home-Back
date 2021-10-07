@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from '../../..';
 import { Mailer } from '../../../context/shared/domain/interfaces/mailer.interface';
+import { JWT } from '../../../context/shared/infrastructure/jsonwebtoken.jwt';
 import { UserCreator } from '../../../context/User/application/UserCreator';
 import { UserEliminator } from '../../../context/User/application/UserEliminator';
 import { User } from '../../../context/User/domain/user.model';
@@ -23,6 +24,11 @@ export class SignupController implements Controller {
       await userCreator.create(user);
 
       const mailer: Mailer = container.get(UtilDependencies.Mailer);
+      const jwt: JWT = container.get(UtilDependencies.JWT);
+
+      const token = jwt.sign({ uuid }, enviroment.token.seed, {
+        expiresIn: enviroment.token.expireIn,
+      });
 
       const isMailSent = await mailer.sendMail(
         enviroment.mailer.appMail,
@@ -32,7 +38,7 @@ export class SignupController implements Controller {
       );
 
       if (isMailSent) {
-        res.status(201).json({ ok: true });
+        res.status(201).json({ ok: true, token });
         return;
       }
 

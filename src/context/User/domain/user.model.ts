@@ -1,4 +1,5 @@
 import { UUID } from '../../shared/domain/valueObject/uuid.valueObject';
+import { UserState } from './user-state/userState.state';
 import { UserEmail } from './valueObject/UserEmail.valueObject';
 import { UserName } from './valueObject/UserName.valueObject';
 import { UserPassword } from './valueObject/UserPassword.valueObject';
@@ -11,7 +12,7 @@ export class User {
   public readonly password: UserPassword;
 
   private _role: UserROLE;
-  private _validated = false;
+  private _userState: UserState;
 
   constructor(
     uuid: string,
@@ -26,11 +27,11 @@ export class User {
     this.email = new UserEmail(email);
     this.password = new UserPassword(password);
     this._role = new UserROLE(role);
-    this._validated = validated;
+    this._userState = UserState.fromBoolean(validated);
   }
 
   get validated(): boolean {
-    return this._validated;
+    return this._userState.validated;
   }
   get role(): UserROLE {
     return this._role;
@@ -58,11 +59,11 @@ export class User {
   }
 
   public validate(): void {
-    this._validated = true;
+    this._userState = this._userState.validate(this.password.value);
   }
 
   public inValidate(): void {
-    this._validated = false;
+    this._userState = this._userState.invalidate(this._role);
   }
 
   public turnAdminRole(): void {
