@@ -1,10 +1,8 @@
 import { Router } from 'express';
-import { InvalidateUserController } from '../controllers/auth/invalidateUser.controller';
-import { LoginController } from '../controllers/auth/login.controller';
-import { LoginTokenController } from '../controllers/auth/loginToken.controller';
-import { SignupController } from '../controllers/auth/signup.controller';
-import { ValidateNewUserController } from '../controllers/auth/validateNewUser.controller';
-import { ValidateUserController } from '../controllers/auth/validateUser.controller';
+
+import { DeleteUserController } from '../controllers/users/deleteUser.controller';
+import { GetAllUsersController } from '../controllers/users/getAllUsers.controller';
+import { GetUserController } from '../controllers/users/getUser.controller';
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
 import { VerifyTokenMiddleware } from '../middlewares/verifyToken.middleware';
 
@@ -15,32 +13,15 @@ const verifyToken = new VerifyTokenMiddleware();
 const verifyRole = new VerifyROLEMiddleware();
 
 // Controllers
-const signupController = new SignupController();
-const validateNewUserController = new ValidateNewUserController();
-const invalidateuserController = new InvalidateUserController();
-const loginUserController = new LoginController();
-const loginTokenUserController = new LoginTokenController();
-const validateUserController = new ValidateUserController();
+const deleteUserController = new DeleteUserController();
+const getAllUsers = new GetAllUsersController();
+const getUser = new GetUserController();
 
-userRouter.post('/signup', signupController.run);
-userRouter.post(
-  '/validate-new',
-  [verifyToken.run],
-  validateNewUserController.run
-);
-userRouter.post(
-  '/validate',
+userRouter.get('/all', [verifyToken.run, verifyRole.run], getAllUsers.run);
+userRouter.get('', [verifyToken.run], getUser.run);
+
+userRouter.delete(
+  '',
   [verifyToken.run, verifyRole.run],
-  validateUserController.run
-);
-userRouter.post('/login', loginUserController.run);
-userRouter.post(
-  '/login-token',
-  [verifyToken.run],
-  loginTokenUserController.run
-);
-userRouter.post(
-  '/invalidate',
-  [verifyToken.run, verifyRole.run],
-  invalidateuserController.run
+  deleteUserController.run
 );
