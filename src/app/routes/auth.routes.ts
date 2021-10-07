@@ -4,6 +4,7 @@ import { ChangePasswordController } from '../controllers/auth/changePassword.con
 import { InvalidateUserController } from '../controllers/auth/invalidateUser.controller';
 import { LoginController } from '../controllers/auth/login.controller';
 import { LoginTokenController } from '../controllers/auth/loginToken.controller';
+import { RecoveryPasswordController } from '../controllers/auth/recoveryPassword.controller';
 import { SignupController } from '../controllers/auth/signup.controller';
 import { ValidateNewUserController } from '../controllers/auth/validateNewUser.controller';
 import { ValidateUserController } from '../controllers/auth/validateUser.controller';
@@ -25,6 +26,7 @@ const loginUserController = new LoginController();
 const loginTokenUserController = new LoginTokenController();
 const validateUserController = new ValidateUserController();
 const changePasswordController = new ChangePasswordController();
+const recoveryPassword = new RecoveryPasswordController();
 
 // Auth
 authRouter.post('/signup', signupController.run);
@@ -51,3 +53,4 @@ authRouter.post(
 );
 
 authRouter.patch('/password', [verifyToken.run], changePasswordController.run);
+authRouter.post('/recovery-pass', recoveryPassword.run);
