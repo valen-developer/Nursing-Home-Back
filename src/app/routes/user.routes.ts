@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { DeleteUserController } from '../controllers/users/deleteUser.controller';
 import { GetAllUsersController } from '../controllers/users/getAllUsers.controller';
 import { GetUserController } from '../controllers/users/getUser.controller';
+import { UpdateUserImageController } from '../controllers/users/updateUserImage.controller';
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
 import { VerifyTokenMiddleware } from '../middlewares/verifyToken.middleware';
 
@@ -14,6 +15,7 @@ const verifyRole = new VerifyROLEMiddleware();
 
 // Controllers
 const deleteUserController = new DeleteUserController();
+const updateImge = new UpdateUserImageController();
 const getAllUsers = new GetAllUsersController();
 const getUser = new GetUserController();
 
@@ -25,3 +27,5 @@ userRouter.delete(
   [verifyToken.run, verifyRole.run],
   deleteUserController.run
 );
+
+userRouter.post('/image', [verifyToken.run], updateImge.run);

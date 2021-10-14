@@ -1,6 +1,7 @@
 import { UUID } from '../../shared/domain/valueObject/uuid.valueObject';
 import { UserState } from './user-state/userState.state';
 import { UserEmail } from './valueObject/UserEmail.valueObject';
+import { UserImage } from './valueObject/UserImage.valueObject';
 import { UserName } from './valueObject/UserName.valueObject';
 import { UserPassword } from './valueObject/UserPassword.valueObject';
 import { ROLE, UserROLE } from './valueObject/UserRol.valueObject';
@@ -13,21 +14,15 @@ export class User {
 
   private _role: UserROLE;
   private _userState: UserState;
+  private _image: UserImage | null = null;
 
-  constructor(
-    uuid: string,
-    name: string,
-    email: string,
-    password: string | null | undefined,
-    role: ROLE,
-    validated = false
-  ) {
-    this.uuid = new UUID(uuid);
-    this.name = new UserName(name);
-    this.email = new UserEmail(email);
-    this.password = new UserPassword(password);
-    this._role = new UserROLE(role);
-    this._userState = UserState.fromBoolean(validated);
+  constructor(userObject: UserObject) {
+    this.uuid = new UUID(userObject.uuid);
+    this.name = new UserName(userObject.name);
+    this.email = new UserEmail(userObject.email);
+    this.password = new UserPassword(userObject.password);
+    this._role = new UserROLE(userObject.role);
+    this._userState = UserState.fromBoolean(userObject.validated ?? false);
   }
 
   get validated(): boolean {
@@ -35,6 +30,10 @@ export class User {
   }
   get role(): UserROLE {
     return this._role;
+  }
+
+  get image(): UserImage | null {
+    return this._image;
   }
 
   public toObject(): UserObject {
@@ -45,6 +44,7 @@ export class User {
       password: this.password.value ? this.password.value : '',
       role: this._role.value,
       validated: this.validated,
+      image: this._image?.value,
     };
   }
 
@@ -55,6 +55,7 @@ export class User {
       email: this.email.value,
       role: this._role.value,
       validated: this.validated,
+      image: this._image?.value,
     };
   }
 
@@ -73,6 +74,10 @@ export class User {
   public turnUserRole(): void {
     this._role = new UserROLE('USER_ROLE');
   }
+
+  public setImagePath(path: string): void {
+    this._image = new UserImage(path);
+  }
 }
 
 export interface UserObject {
@@ -82,4 +87,5 @@ export interface UserObject {
   password?: string;
   role: ROLE;
   validated: boolean;
+  image?: string;
 }

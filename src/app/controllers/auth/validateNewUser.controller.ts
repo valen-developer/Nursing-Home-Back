@@ -26,14 +26,7 @@ export class ValidateNewUserController implements Controller {
       const crypt: ICrypt = container.get(UtilDependencies.Crypt);
       const encryptPassword = crypt.hash(password, 10);
 
-      user = new User(
-        user.uuid.value,
-        user.name.value,
-        user.email.value,
-        encryptPassword,
-        user.role.value,
-        user.validated
-      );
+      user = new User(user.toObject());
 
       user.validate();
 

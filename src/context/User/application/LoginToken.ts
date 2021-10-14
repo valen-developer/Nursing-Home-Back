@@ -19,13 +19,6 @@ export class LoginToken {
 
     if (!userObject) return null;
 
-    return new User(
-      userObject.uuid,
-      userObject.name,
-      userObject.email,
-      userObject.password,
-      userObject.role,
-      userObject.validated
-    );
+    return new User(userObject);
   }
 }

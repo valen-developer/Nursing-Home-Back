@@ -18,7 +18,13 @@ export class SignupController implements Controller {
     const { email, name, uuid } = req.body;
 
     try {
-      const user = new User(uuid, name, email, null, 'USER_ROLE');
+      const user = new User({
+        uuid,
+        name,
+        email,
+        role: 'USER_ROLE',
+        validated: false,
+      });
       const userCreator: UserCreator = container.get(UserUsesCases.UserCreator);
 
       await userCreator.create(user);

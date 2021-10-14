@@ -60,14 +60,7 @@ export class MongoUserRepository implements UserRepository {
     try {
       const userMongo: UserObject = await UserMongoModel.findOne({ uuid });
 
-      return new User(
-        userMongo.uuid,
-        userMongo.name,
-        userMongo.email,
-        userMongo.password,
-        userMongo.role,
-        userMongo.validated
-      );
+      return new User(userMongo);
     } catch (error) {
       throw new HTTPException(
         'mongo user repository: get',
@@ -81,14 +74,7 @@ export class MongoUserRepository implements UserRepository {
     try {
       const userMongo: UserObject = await UserMongoModel.findOne({ email });
 
-      return new User(
-        userMongo.uuid,
-        userMongo.name,
-        userMongo.email,
-        userMongo.password,
-        userMongo.role,
-        userMongo.validated
-      );
+      return new User(userMongo);
     } catch (error) {
       throw new HTTPException(
         'mongo user repository: get',
@@ -102,10 +88,7 @@ export class MongoUserRepository implements UserRepository {
     try {
       const usersMongo: UserObject[] = await UserMongoModel.find();
 
-      return usersMongo.map(
-        (u) =>
-          new User(u.uuid, u.name, u.email, u.password, u.role, u.validated)
-      );
+      return usersMongo.map((u) => new User(u));
     } catch (error) {
       return [];
     }

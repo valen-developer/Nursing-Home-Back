@@ -2,19 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import { File as FileForm } from 'formidable';
 
-import { Request, Response } from 'express';
-
 import { FileUploader } from '../domain/interfaces/fileUploader.interface';
 import { HTTPException } from '../domain/httpException';
 
 export class FormFileUploader implements FileUploader {
-  public aviableExtensions: string[] = [];
+  public aviableExtensions: string[] = ['png', 'jpeg', 'jpg'];
   constructor() {}
 
   /**
    *
-   * @param request File from formidable
-   * @param response
+   *
+   * @param file (file form)
    * @param fileName
    * @param destinationPath
    */

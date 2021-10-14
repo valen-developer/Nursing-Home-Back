@@ -1,3 +1,4 @@
+import path from 'path';
 import { loadEnv } from '../../helpers/loadENV';
 loadEnv();
 
@@ -21,4 +22,6 @@ export const enviroment = {
     expireIn: process.env.TOKENEXPIRE || '30d',
   },
   port: process.env.PORT || '',
+  fileFolderPath:
+    process.env.FILES_FOLDER_PATH || path.join(__dirname, '../../..', 'files'),
 };

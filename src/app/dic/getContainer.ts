@@ -1,4 +1,5 @@
 import { IOC } from 'dic-ioc';
+import { injectInstalationUsesCases } from './instalationUsesCases.injector';
 import { injectRepositories } from './repositories.injector';
 import { injectUserUsesCases } from './userUsesCases.injector';
 
@@ -15,6 +16,9 @@ export const getContainer = (): IOC => {
 
   // User use cases
   container = injectUserUsesCases(container);
+
+  // Instalation use cases
+  container = injectInstalationUsesCases(container);
 
   return container;
 };

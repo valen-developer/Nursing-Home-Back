@@ -30,14 +30,10 @@ export class ChangePasswordController implements Controller {
       const crypt: ICrypt = container.get(UtilDependencies.Crypt);
       const user = await userFinder.getUser(uuid);
 
-      const newUser = new User(
-        user.uuid.value,
-        user.name.value,
-        user.email.value,
-        crypt.hash(password, 10),
-        user.role.value,
-        user.validated
-      );
+      const newUser = new User({
+        ...user.toObject(),
+        password: crypt.hash(password, 10),
+      });
 
       const userUpdater: UserUpdater = container.get(UserUsesCases.UserUpdater);
       userUpdater.update(newUser);
