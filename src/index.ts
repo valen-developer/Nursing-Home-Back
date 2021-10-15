@@ -1,5 +1,6 @@
 import cors from 'cors';
-import { json, urlencoded } from 'express';
+import { json, urlencoded, static as serveStatic } from 'express';
+import path from 'path';
 
 import { enviroment } from './app/config/enviroment';
 import { getContainer } from './app/dic/getContainer';
@@ -15,6 +16,9 @@ const server = new Server(enviroment.port);
 server.app.use(urlencoded({ extended: false }));
 server.app.use(json());
 server.app.use(cors());
+
+// serve public folder
+server.app.use('/api', serveStatic(path.join(__dirname, '..', 'public')));
 
 export const container = getContainer();
 
