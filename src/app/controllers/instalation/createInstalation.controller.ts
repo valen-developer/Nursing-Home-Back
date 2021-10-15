@@ -13,10 +13,11 @@ import { InstalationUsesCases } from '../../dic/instalationUsesCases.injector';
 import { UtilDependencies } from '../../dic/utils.inhector';
 import { Controller } from '../controller.interface';
 import { InstalationUpdater } from '../../../context/Instalation/application/InstalationUpdater';
+import { enviroment } from '../../config/enviroment';
 
 export class CreateInstalationController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
-    const destinationFolder = path.join(__dirname, '../../../..', 'public');
+    const destinationFolder = enviroment.publicFolder;
 
     const form = formidable({
       multiples: true,

@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { CreateInstalationController } from '../controllers/instalation/createInstalation.controller';
+import { DeleteInstalationImageController } from '../controllers/instalation/deleteImage.controller';
+import { DeleteInstalationController } from '../controllers/instalation/deleteInstalation.controller';
 import { GetAllInstalationController } from '../controllers/instalation/getAllInstalations.controller';
+import { GetInstalationController } from '../controllers/instalation/getInstalation.controller';
+import { UploadInstalationImageController } from '../controllers/instalation/uploadInstalationImage.controller';
 
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
 import { VerifyTokenMiddleware } from '../middlewares/verifyToken.middleware';
@@ -13,7 +17,11 @@ const verifyRole = new VerifyROLEMiddleware();
 
 // Controller
 const createInstalation = new CreateInstalationController();
+const uploadImage = new UploadInstalationImageController();
 const getAllInstalations = new GetAllInstalationController();
+const getInstalation = new GetInstalationController();
+const deleteInstalation = new DeleteInstalationController();
+const deleteImage = new DeleteInstalationImageController();
 
 instalationRouter.post(
   '',
@@ -21,4 +29,23 @@ instalationRouter.post(
   createInstalation.run
 );
 
-instalationRouter.get('', getAllInstalations.run);
+instalationRouter.post(
+  '/image',
+  [verifyToken.run, verifyRole.run],
+  uploadImage.run
+);
+
+instalationRouter.get('/all', getAllInstalations.run);
+instalationRouter.get('/:instalationUuid', getInstalation.run);
+
+instalationRouter.delete(
+  '/',
+  [verifyToken.run, verifyRole.run],
+  deleteInstalation.run
+);
+
+instalationRouter.delete(
+  '/image',
+  [verifyToken.run, verifyRole.run],
+  deleteImage.run
+);

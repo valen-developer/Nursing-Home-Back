@@ -59,8 +59,8 @@ export class MongoInstalationRepository implements InstalationRepository {
       return new Instalation(instalationMongo);
     } catch (error) {
       throw new HTTPException(
-        'mongo user repository: get',
-        'user not found',
+        'mongo instalation repository: get',
+        'instalation not found',
         404
       );
     }

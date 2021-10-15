@@ -22,6 +22,7 @@ export const enviroment = {
     expireIn: process.env.TOKENEXPIRE || '30d',
   },
   port: process.env.PORT || '',
+  publicFolder: path.join(__dirname, '../../..', 'public'),
   fileFolderPath:
     process.env.FILES_FOLDER_PATH || path.join(__dirname, '../../..', 'files'),
 };

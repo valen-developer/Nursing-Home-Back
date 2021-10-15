@@ -7,7 +7,7 @@ import { Controller } from '../controller.interface';
 
 export class GetInstalationController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
-    const { instalationUuid: uuid } = req.body;
+    const { instalationUuid: uuid } = req.params;
 
     try {
       const instalationFinder: InstalationFinder = container.get(

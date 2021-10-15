@@ -1,4 +1,5 @@
 import { IOC } from 'dic-ioc';
+import { FileDeleter } from '../../context/shared/application/fileDeleter';
 import { Bcrypt } from '../../context/shared/infrastructure/bcrypt.crypt';
 import { JWT } from '../../context/shared/infrastructure/jsonwebtoken.jwt';
 import { FormFileUploader } from '../../context/shared/infrastructure/multer.fileUploader';
@@ -17,6 +18,7 @@ export const enum UtilDependencies {
   Mailer = 'Mailer',
   UuidGenerator = 'UuidGenerator',
   FileUploader = 'FileUploader',
+  FileDeleter = 'FileDeleter',
 }
 
 export const injectUtils = (container: IOC): IOC => {
@@ -44,6 +46,8 @@ export const injectUtils = (container: IOC): IOC => {
     UtilDependencies.UuidGenerator,
     () => new UuidGenerator()
   );
+
+  container.setService(UtilDependencies.FileDeleter, () => new FileDeleter());
 
   return container;
 };
