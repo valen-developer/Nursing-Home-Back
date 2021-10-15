@@ -4,6 +4,7 @@ import { DeleteInstalationImageController } from '../controllers/instalation/del
 import { DeleteInstalationController } from '../controllers/instalation/deleteInstalation.controller';
 import { GetAllInstalationController } from '../controllers/instalation/getAllInstalations.controller';
 import { GetInstalationController } from '../controllers/instalation/getInstalation.controller';
+import { UpdateInstalationController } from '../controllers/instalation/updateInstalation.controller';
 import { UploadInstalationImageController } from '../controllers/instalation/uploadInstalationImage.controller';
 
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
@@ -22,6 +23,7 @@ const getAllInstalations = new GetAllInstalationController();
 const getInstalation = new GetInstalationController();
 const deleteInstalation = new DeleteInstalationController();
 const deleteImage = new DeleteInstalationImageController();
+const updateInstalation = new UpdateInstalationController();
 
 instalationRouter.post(
   '',
@@ -48,4 +50,10 @@ instalationRouter.delete(
   '/image',
   [verifyToken.run, verifyRole.run],
   deleteImage.run
+);
+
+instalationRouter.put(
+  '',
+  [verifyToken.run, verifyRole.run],
+  updateInstalation.run
 );
