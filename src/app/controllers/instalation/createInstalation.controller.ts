@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import formidable from 'formidable';
 import path from 'path';
+import fs from 'fs';
+
 import { container } from '../../..';
 import { InstalationCreator } from '../../../context/Instalation/application/InstalationCreator';
 import { Instalation } from '../../../context/Instalation/domain/instalation.model';
@@ -10,6 +12,7 @@ import { errorHandler } from '../../../helpers/errorHandler';
 import { InstalationUsesCases } from '../../dic/instalationUsesCases.injector';
 import { UtilDependencies } from '../../dic/utils.inhector';
 import { Controller } from '../controller.interface';
+import { InstalationUpdater } from '../../../context/Instalation/application/InstalationUpdater';
 
 export class CreateInstalationController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -27,13 +30,34 @@ export class CreateInstalationController implements Controller {
 
           const { instalationUuid, name, description } = fields;
 
-          const fileArray = files.file as formidable.File[];
+          console.log();
+
+          const fileArray =
+            files.file instanceof Array ? files.file : [files.file];
+
+          // Instalation instance
+          const instalation = new Instalation({
+            uuid: instalationUuid as string,
+            description: description as string,
+            name: name as string,
+            imagePaths: [],
+          });
+
+          // Create instalation
+          const instalationCreator: InstalationCreator = container.get(
+            InstalationUsesCases.InstalationCreator
+          );
+          await instalationCreator.create(instalation).catch((err) => {
+            fileArray.forEach((f) => fs.unlinkSync(f.path));
+
+            throw err;
+          });
+
+          // save images
           const fileUploader: FileUploader = container.get(
             UtilDependencies.FileUploader
           );
-
           let imagePaths: string[] = [];
-
           await asyncForEach<formidable.File>(fileArray, async (f, i) => {
             const ipath: string = await fileUploader.upload(
               f,
@@ -41,25 +65,15 @@ export class CreateInstalationController implements Controller {
               destinationFolder
             );
 
-            imagePaths.push(ipath);
-            console.log('DENTRO DE ASYNC');
-            console.log(imagePaths);
+            if (ipath) imagePaths.push(ipath);
           });
 
-          console.log('FUERA DE ASYNC');
-          console.log(imagePaths);
-
-          const instalationCreator: InstalationCreator = container.get(
-            InstalationUsesCases.InstalationCreator
+          // update images
+          instalation.setImages(imagePaths);
+          const instalationUpdater: InstalationUpdater = container.get(
+            InstalationUsesCases.InstalationUpdater
           );
-          const instalation = new Instalation({
-            uuid: instalationUuid as string,
-            description: description as string,
-            name: name as string,
-            imagePaths,
-          });
-
-          await instalationCreator.create(instalation);
+          await instalationUpdater.update(instalation);
 
           res.json({ ok: true });
         } catch (error) {

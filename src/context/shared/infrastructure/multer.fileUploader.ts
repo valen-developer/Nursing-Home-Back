@@ -26,8 +26,15 @@ export class FormFileUploader implements FileUploader {
 
     const fileExtension = this.extractExtension(file.name ?? '');
 
-    if (!this.aviableExtensions.includes(fileExtension))
-      throw new HTTPException('FormFileUploader', 'invalid file', 400);
+    if (!this.aviableExtensions.includes(fileExtension)) {
+      fs.unlink(file.path, (err) => {
+        console.log(err);
+      });
+
+      console.log(file.name);
+
+      return '';
+    }
 
     const newPath = path.join(destinationPath, `${fileName}.${fileExtension}`);
 

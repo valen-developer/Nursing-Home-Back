@@ -7,13 +7,17 @@ export class Instalation {
   public readonly uuid: UUID;
   public readonly name: InstalationName;
   public readonly description: InstalationDescription;
-  public readonly imagePaths: ImagePath[] = [];
+  private _imagePaths: ImagePath[] = [];
 
   constructor(instalation: InstalationObject) {
     this.uuid = new UUID(instalation.uuid);
     this.name = new InstalationName(instalation.name);
     this.description = new InstalationDescription(instalation.description);
-    this.imagePaths = instalation.imagePaths.map((i) => new ImagePath(i));
+    this._imagePaths = instalation.imagePaths.map((i) => new ImagePath(i));
+  }
+
+  get imagePaths(): ImagePath[] {
+    return this._imagePaths;
   }
 
   public toObject(): InstalationObject {
@@ -21,8 +25,12 @@ export class Instalation {
       uuid: this.uuid.value,
       name: this.name.value,
       description: this.description.value,
-      imagePaths: this.imagePaths.map((i) => i.value),
+      imagePaths: this._imagePaths.map((i) => i.value),
     };
+  }
+
+  public setImages(imagePaths: string[]): void {
+    this._imagePaths = imagePaths.map((i) => new ImagePath(i));
   }
 }
 
