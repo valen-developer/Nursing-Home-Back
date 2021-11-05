@@ -1,4 +1,5 @@
 import { IOC } from 'dic-ioc';
+import { MongoActivityRepository } from '../../context/Activity/infrastructure/mongoActivityRepository/mongoActivityRepository';
 
 import { MongoInstalationRepository } from '../../context/Instalation/infrastructure/mongoInstalationRepository/mongoInstalationRepository';
 import { MongoJobRepository } from '../../context/Jobs/infrastructure/mongoJobRepository/mongoJob.respository';
@@ -10,6 +11,7 @@ export const enum Repositories {
   UserCacheRepository = 'UserCacheRepository',
   InstalationRepository = 'InstalationRepository',
   JobRepository = 'JobRepository',
+  ActivityRepository = 'ActivityRepository',
 }
 
 export const injectRepositories = (container: IOC): IOC => {
@@ -31,6 +33,11 @@ export const injectRepositories = (container: IOC): IOC => {
   container.setService(
     Repositories.JobRepository,
     () => new MongoJobRepository()
+  );
+
+  container.setService(
+    Repositories.ActivityRepository,
+    () => new MongoActivityRepository()
   );
 
   return container;

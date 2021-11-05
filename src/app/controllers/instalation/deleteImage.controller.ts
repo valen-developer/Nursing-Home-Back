@@ -44,9 +44,6 @@ export class DeleteInstalationImageController implements Controller {
 
       const newImagesPaths = images.filter((i) => i !== fileName);
 
-      console.log(images);
-      console.log(newImagesPaths);
-
       instalation.setImages(newImagesPaths);
 
       const instalationsUploader: InstalationUpdater = container.get(

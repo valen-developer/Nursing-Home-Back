@@ -1,7 +1,7 @@
 node_modules
 dist
 files
-public
+./public
 
 .env
 
