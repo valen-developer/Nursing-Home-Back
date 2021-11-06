@@ -31,8 +31,6 @@ export class FormFileUploader implements FileUploader {
         console.log(err);
       });
 
-      console.log(file.name);
-
       return '';
     }
 

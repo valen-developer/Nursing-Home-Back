@@ -69,10 +69,7 @@ export class CreateActivityController implements Controller {
 
           // update images
           activity.setImages(imagePaths);
-          console.log(
-            '🚀 -> CreateActivityController -> form.parse -> activity',
-            activity
-          );
+
           const activityUpdater: ActivityUpdater = container.get(
             ActivityUsesCases.ActivityUpdater
           );

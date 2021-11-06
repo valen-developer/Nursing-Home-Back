@@ -7,17 +7,12 @@ export class FileDeleter {
    * @returns how many found
    */
   public byNameMatch(folder: string, name: string): number {
-    console.log('🚀 -> FileDeleter -> byNameMatch -> name', name);
     const files = fs
       .readdirSync(folder)
       .map((entityName) => path.join(folder, entityName))
       .filter(this.isNotdirectory);
 
     const fileToUnlink = files.filter((f) => f.includes(name));
-    console.log(
-      '🚀 -> FileDeleter -> byNameMatch -> fileToUnlink',
-      fileToUnlink
-    );
 
     fileToUnlink.forEach((f) => fs.unlinkSync(f));
 

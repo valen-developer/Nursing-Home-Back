@@ -25,8 +25,6 @@ export class LoginUser {
 
   private async saveOnCache(user: User): Promise<void> {
     const isSaved = await this.userCacheRepository.setUser(user);
-
-    console.log('isSaved: ', isSaved);
   }
 }
 

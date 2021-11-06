@@ -24,8 +24,6 @@ export class LoginController implements Controller {
         expiresIn: enviroment.token.expireIn,
       });
 
-      console.log(user.toObject());
-
       res.json({
         ok: true,
         user: user.toObjectWithoutPassword(),
