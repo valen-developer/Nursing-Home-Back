@@ -52,5 +52,9 @@ authRouter.post(
   invalidateuserController.run
 );
 
-authRouter.patch('/password', [verifyToken.run], changePasswordController.run);
+authRouter.patch(
+  '/change-password',
+  [verifyToken.run],
+  changePasswordController.run
+);
 authRouter.post('/recovery-pass', recoveryPassword.run);

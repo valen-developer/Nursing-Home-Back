@@ -9,7 +9,7 @@ import { Controller } from '../controller.interface';
 
 export class DeleteUserController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
-    const { userUuid: uuid } = req.body;
+    const { userUuid: uuid } = req.params;
 
     try {
       const userEliminator: UserEliminator = container.get(

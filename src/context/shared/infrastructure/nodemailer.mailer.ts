@@ -24,7 +24,11 @@ export class NodeMailer implements Mailer {
         html,
       })
       .then(() => true)
-      .catch(() => false);
+      .catch((error) => {
+        console.log('🚀 -> NodeMailer -> error', error);
+
+        return false;
+      });
   }
 }
 
