@@ -39,7 +39,7 @@ export class CreateActivityController implements Controller {
             uuid: activityUuid as string,
             description: description as string,
             name: name as string,
-            imagePath: [],
+            imagePaths: [],
           });
 
           // Create instalation

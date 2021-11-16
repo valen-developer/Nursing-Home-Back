@@ -15,7 +15,7 @@ const ActivitySchema = new Schema({
   description: {
     type: String,
   },
-  imagePath: {
+  imagePaths: {
     type: [String],
   },
 });
