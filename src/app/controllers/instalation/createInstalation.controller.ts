@@ -31,8 +31,6 @@ export class CreateInstalationController implements Controller {
 
           const { instalationUuid, name, description } = fields;
 
-          console.log();
-
           const fileArray =
             files.file instanceof Array ? files.file : [files.file];
 

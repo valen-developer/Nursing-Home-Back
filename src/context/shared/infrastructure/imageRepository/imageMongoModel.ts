@@ -2,25 +2,23 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const JobSchema = new Schema({
+const ImageSchema = new Schema({
   uuid: {
     type: String,
     required: true,
     unique: true,
   },
-  name: {
+  entityUuid: {
     type: String,
     required: true,
   },
-  description: {
+  path: {
     type: String,
-  },
-  imagePaths: {
-    type: [String],
+    required: true,
   },
 });
 
-export const JobMongoModel: mongoose.Model<any, any, any> = mongoose.model(
-  'job',
-  JobSchema
+export const ImageMongoModel: mongoose.Model<any, any, any> = mongoose.model(
+  'image',
+  ImageSchema
 );
