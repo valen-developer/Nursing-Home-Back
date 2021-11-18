@@ -15,9 +15,6 @@ const ActivitySchema = new Schema({
   description: {
     type: String,
   },
-  imagePaths: {
-    type: [String],
-  },
 });
 
 export const ActivityMongoModel: mongoose.Model<any, any, any> = mongoose.model(

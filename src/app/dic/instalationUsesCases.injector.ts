@@ -4,7 +4,9 @@ import { InstalationEliminator } from '../../context/Instalation/application/Ins
 import { InstalationFinder } from '../../context/Instalation/application/InstalationFinder';
 import { InstalationUpdater } from '../../context/Instalation/application/InstalationUpdater';
 import { InstalationRepository } from '../../context/Instalation/domain/interfaces/instalation.respository';
+import { ImageRepository } from '../../context/shared/domain/interfaces/image.repository';
 import { Repositories } from './repositories.injector';
+import { UtilDependencies } from './utils.inhector';
 
 export const enum InstalationUsesCases {
   InstalationCreator = 'InstalationCreator',
@@ -18,17 +20,24 @@ export const injectInstalationUsesCases = (c: IOC): IOC => {
     Repositories.InstalationRepository
   );
 
+  const imageRepository: ImageRepository = c.get(Repositories.ImageRepository);
+
   c.setService(
     InstalationUsesCases.InstalationCreator,
-    () => new InstalationCreator(instalationRepository)
+    (c) =>
+      new InstalationCreator(
+        instalationRepository,
+        imageRepository,
+        c.get(UtilDependencies.UuidGenerator)
+      )
   );
   c.setService(
     InstalationUsesCases.InstalationFinder,
-    () => new InstalationFinder(instalationRepository)
+    () => new InstalationFinder(instalationRepository, imageRepository)
   );
   c.setService(
     InstalationUsesCases.InstalationEliminator,
-    () => new InstalationEliminator(instalationRepository)
+    () => new InstalationEliminator(instalationRepository, imageRepository)
   );
   c.setService(
     InstalationUsesCases.InstalationUpdater,

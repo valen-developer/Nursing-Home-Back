@@ -1,10 +1,18 @@
 import { HTTPException } from '../../domain/httpException';
-import { Image } from '../../domain/image.model';
+import { Image, ImageObject } from '../../domain/image.model';
 import { ImageRepository } from '../../domain/interfaces/image.repository';
 import { ImageMongoModel } from './imageMongoModel';
 
 export class MongoImageRepository implements ImageRepository {
+  async getByEntityUuid(entityUuid: string): Promise<Image[]> {
+    const images: ImageObject[] = await ImageMongoModel.find({ entityUuid });
+    if (!images) return [];
+
+    return images.map((image) => new Image(image));
+  }
+
   async create(image: Image): Promise<Image> {
+    console.log('🚀 -> MongoImageRepository -> create -> image', image);
     const imageMongoModel = new ImageMongoModel(image.toObject());
 
     try {

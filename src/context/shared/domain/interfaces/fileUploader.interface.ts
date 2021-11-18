@@ -12,4 +12,10 @@ export abstract class FileUploader {
     fileName: string,
     destinationPath: string
   ): Promise<any>;
+
+  public abstract uploadAll(
+    file: any[],
+    fileName: string,
+    destinationPath: string
+  ): Promise<string[]>;
 }

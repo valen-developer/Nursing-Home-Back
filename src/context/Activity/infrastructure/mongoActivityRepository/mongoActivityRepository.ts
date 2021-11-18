@@ -10,9 +10,14 @@ export class MongoActivityRepository implements ActivityRepository {
     try {
       const activitiesObject: ActivityObject[] =
         await ActivityMongoModel.find().exec();
+      console.log(
+        '🚀 -> MongoActivityRepository -> getAll -> activitiesObject',
+        activitiesObject
+      );
 
       return activitiesObject.map((activity) => new Activity(activity));
     } catch (error) {
+      console.log(error);
       return [];
     }
   }

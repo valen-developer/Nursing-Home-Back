@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { File as FileForm } from 'formidable';
+import formidable, { File as FileForm } from 'formidable';
 
 import { FileUploader } from '../domain/interfaces/fileUploader.interface';
 import { HTTPException } from '../domain/httpException';
+import { asyncForEach } from '../../../helpers/asynForeach';
 
 export class FormFileUploader implements FileUploader {
   public aviableExtensions: string[] = ['png', 'jpeg', 'jpg'];
@@ -52,6 +53,25 @@ export class FormFileUploader implements FileUploader {
     });
 
     return `${fileName}.${fileExtension}`;
+  }
+
+  public async uploadAll(
+    files: FileForm[],
+    fileName: string,
+    destinationPath: string
+  ): Promise<string[]> {
+    let imagePaths: string[] = [];
+    await asyncForEach<formidable.File>(files, async (f, i) => {
+      const ipath: string = await this.upload(
+        f,
+        `${fileName}-${i}`,
+        destinationPath
+      );
+
+      if (ipath) imagePaths.push(ipath);
+    });
+
+    return imagePaths;
   }
 
   private extractExtension(fileName: string): string {

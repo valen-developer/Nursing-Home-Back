@@ -10,11 +10,10 @@ export class Activity {
   private _imagePaths: ImagePath[] = [];
 
   constructor(activity: ActivityObject) {
-    console.log('🚀 -> Activity -> constructor -> activity', activity);
     this.uuid = new UUID(activity.uuid);
     this.name = new ActivityName(activity.name);
     this.description = new ActivityDescription(activity.description);
-    this._imagePaths = activity.imagePaths.map((i) => new ImagePath(i));
+    this._imagePaths = activity.imagePaths?.map((i) => new ImagePath(i)) ?? [];
   }
 
   get imagePaths(): string[] {

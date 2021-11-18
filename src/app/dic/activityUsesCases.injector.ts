@@ -4,7 +4,9 @@ import { ActivityEliminator } from '../../context/Activity/application/ActivityE
 import { ActivityFinder } from '../../context/Activity/application/ActivityFinder';
 import { ActivityUpdater } from '../../context/Activity/application/ActivityUpdater';
 import { ActivityRepository } from '../../context/Activity/domain/interfaces/ActivityRepository.interface';
+import { ImageRepository } from '../../context/shared/domain/interfaces/image.repository';
 import { Repositories } from './repositories.injector';
+import { UtilDependencies } from './utils.inhector';
 
 export enum ActivityUsesCases {
   ActivityCreator = 'ActivityCreator',
@@ -18,9 +20,18 @@ export const injectActivityUsesCases = (container: IOC): IOC => {
     Repositories.ActivityRepository
   );
 
+  const imageRepository: ImageRepository = container.get(
+    Repositories.ImageRepository
+  );
+
   container.setService(
     ActivityUsesCases.ActivityCreator,
-    () => new ActivityCreator(activityRepository)
+    (c) =>
+      new ActivityCreator(
+        activityRepository,
+        imageRepository,
+        c.get(UtilDependencies.UuidGenerator)
+      )
   );
   container.setService(
     ActivityUsesCases.ActivityUpdater,
@@ -28,11 +39,11 @@ export const injectActivityUsesCases = (container: IOC): IOC => {
   );
   container.setService(
     ActivityUsesCases.ActivityDeleter,
-    () => new ActivityEliminator(activityRepository)
+    () => new ActivityEliminator(activityRepository, imageRepository)
   );
   container.setService(
     ActivityUsesCases.ActivityFinder,
-    () => new ActivityFinder(activityRepository)
+    () => new ActivityFinder(activityRepository, imageRepository)
   );
 
   return container;

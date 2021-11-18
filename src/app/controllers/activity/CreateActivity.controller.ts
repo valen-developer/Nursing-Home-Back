@@ -42,38 +42,27 @@ export class CreateActivityController implements Controller {
             imagePaths: [],
           });
 
+          // save images
+          const fileUploader: FileUploader = container.get(
+            UtilDependencies.FileUploader
+          );
+          const imagePaths: string[] = await fileUploader.uploadAll(
+            fileArray,
+            activity.uuid.value,
+            destinationFolder
+          );
+
+          activity.setImages(imagePaths);
+
           // Create instalation
           const activityCreator: ActivityCreator = container.get(
             ActivityUsesCases.ActivityCreator
           );
           await activityCreator.create(activity).catch((err) => {
-            fileArray.forEach((f) => fs.unlinkSync(f.path));
+            imagePaths.forEach((path) => fs.unlinkSync(path));
 
             throw err;
           });
-
-          // save images
-          const fileUploader: FileUploader = container.get(
-            UtilDependencies.FileUploader
-          );
-          let imagePaths: string[] = [];
-          await asyncForEach<formidable.File>(fileArray, async (f, i) => {
-            const ipath: string = await fileUploader.upload(
-              f,
-              `${activityUuid}-${i}`,
-              destinationFolder
-            );
-
-            if (ipath) imagePaths.push(ipath);
-          });
-
-          // update images
-          activity.setImages(imagePaths);
-
-          const activityUpdater: ActivityUpdater = container.get(
-            ActivityUsesCases.ActivityUpdater
-          );
-          await activityUpdater.update(activity);
 
           res.json({ ok: true });
         } catch (error) {

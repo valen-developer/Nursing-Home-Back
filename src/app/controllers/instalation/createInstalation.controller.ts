@@ -42,6 +42,18 @@ export class CreateInstalationController implements Controller {
             imagePaths: [],
           });
 
+          // save images
+          const fileUploader: FileUploader = container.get(
+            UtilDependencies.FileUploader
+          );
+
+          const imagePaths: string[] = await fileUploader.uploadAll(
+            fileArray,
+            instalation.uuid.value,
+            destinationFolder
+          );
+          instalation.setImages(imagePaths);
+
           // Create instalation
           const instalationCreator: InstalationCreator = container.get(
             InstalationUsesCases.InstalationCreator
@@ -51,28 +63,6 @@ export class CreateInstalationController implements Controller {
 
             throw err;
           });
-
-          // save images
-          const fileUploader: FileUploader = container.get(
-            UtilDependencies.FileUploader
-          );
-          let imagePaths: string[] = [];
-          await asyncForEach<formidable.File>(fileArray, async (f, i) => {
-            const ipath: string = await fileUploader.upload(
-              f,
-              `${instalationUuid}-${i}`,
-              destinationFolder
-            );
-
-            if (ipath) imagePaths.push(ipath);
-          });
-
-          // update images
-          instalation.setImages(imagePaths);
-          const instalationUpdater: InstalationUpdater = container.get(
-            InstalationUsesCases.InstalationUpdater
-          );
-          await instalationUpdater.update(instalation);
 
           res.json({ ok: true });
         } catch (error) {

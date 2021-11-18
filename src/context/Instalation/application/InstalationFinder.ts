@@ -1,14 +1,36 @@
+import { asyncForEach } from '../../../helpers/asynForeach';
+import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
 import { Instalation } from '../domain/instalation.model';
 import { InstalationRepository } from '../domain/interfaces/instalation.respository';
 
 export class InstalationFinder {
-  constructor(private instalationRepository: InstalationRepository) {}
+  constructor(
+    private instalationRepository: InstalationRepository,
+    private imageRepository: ImageRepository
+  ) {}
 
   public async get(uuid: string): Promise<Instalation> {
-    return await this.instalationRepository.get(uuid);
+    const instalation = await this.instalationRepository.get(uuid);
+    const images = await this.imageRepository.getByEntityUuid(
+      instalation.uuid.value
+    );
+    instalation.setImages(images.map((i) => i.path.value));
+
+    return instalation;
   }
 
   public async getAll(): Promise<Instalation[]> {
-    return await this.instalationRepository.getAll();
+    const instalation = await this.instalationRepository.getAll();
+
+    await asyncForEach<Instalation>(instalation, async (a) => {
+      const images = await this.imageRepository.getByEntityUuid(a.uuid.value);
+      console.log(
+        '🚀 -> InstalationFinder -> awaitasyncForEach<Instalation> -> images',
+        images
+      );
+      a.setImages(images.map((i) => i.path.value));
+    });
+
+    return instalation;
   }
 }

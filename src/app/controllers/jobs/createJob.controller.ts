@@ -41,6 +41,16 @@ export class CreateJobController implements Controller {
             imagePaths: [],
           });
 
+          const fileUploader: FileUploader = container.get(
+            UtilDependencies.FileUploader
+          );
+          const imagePaths: string[] = await fileUploader.uploadAll(
+            fileArray,
+            job.uuid.value,
+            uploadDir
+          );
+          job.setImages(imagePaths);
+
           // Create job
           const jobCreater: JobCreater = container.get(JobUsesCases.JobCreator);
           await jobCreater.create(job).catch((err) => {
@@ -48,27 +58,6 @@ export class CreateJobController implements Controller {
 
             throw err;
           });
-
-          // Save images
-          // save images
-          const fileUploader: FileUploader = container.get(
-            UtilDependencies.FileUploader
-          );
-          let imagePaths: string[] = [];
-          await asyncForEach<formidable.File>(fileArray, async (f, i) => {
-            const ipath: string = await fileUploader.upload(
-              f,
-              `${uuid}-${i}`,
-              uploadDir
-            );
-
-            if (ipath) imagePaths.push(ipath);
-          });
-
-          // update images
-          job.setImages(imagePaths);
-          const jobUpdater: JobUpdater = container.get(JobUsesCases.JobUpdate);
-          await jobUpdater.update(job);
 
           res.json({
             ok: true,
