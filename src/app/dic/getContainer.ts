@@ -10,11 +10,11 @@ import { injectUtils } from './utils.inhector';
 export const getContainer = (): IOC => {
   let container = new IOC();
 
-  // utils
-  container = injectUtils(container);
-
   // Repositoies
   container = injectRepositories(container);
+
+  // utils
+  container = injectUtils(container);
 
   // User use cases
   container = injectUserUsesCases(container);

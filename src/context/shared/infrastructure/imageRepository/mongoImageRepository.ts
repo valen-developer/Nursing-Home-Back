@@ -37,11 +37,16 @@ export class MongoImageRepository implements ImageRepository {
     }
   }
 
-  async delete(uuid: string): Promise<void> {
-    await ImageMongoModel.findOneAndDelete({ uuid });
+  async delete(uuid: string): Promise<ImageObject> {
+    const image: ImageObject = await ImageMongoModel.findOneAndDelete({ uuid });
+
+    return image;
   }
 
-  async deleteAllByEntity(entityUuid: string): Promise<void> {
-    await ImageMongoModel.findOneAndDelete({ entityUuid });
+  async deleteAllByEntity(entityUuid: string): Promise<ImageObject[]> {
+    const images: ImageObject[] = await ImageMongoModel.find({ entityUuid });
+    await ImageMongoModel.deleteMany({ entityUuid });
+
+    return images;
   }
 }

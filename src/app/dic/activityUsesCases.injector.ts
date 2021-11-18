@@ -4,6 +4,7 @@ import { ActivityEliminator } from '../../context/Activity/application/ActivityE
 import { ActivityFinder } from '../../context/Activity/application/ActivityFinder';
 import { ActivityUpdater } from '../../context/Activity/application/ActivityUpdater';
 import { ActivityRepository } from '../../context/Activity/domain/interfaces/ActivityRepository.interface';
+import { ImageDeleter } from '../../context/shared/application/imageDeleter';
 import { ImageRepository } from '../../context/shared/domain/interfaces/image.repository';
 import { Repositories } from './repositories.injector';
 import { UtilDependencies } from './utils.inhector';
@@ -24,6 +25,10 @@ export const injectActivityUsesCases = (container: IOC): IOC => {
     Repositories.ImageRepository
   );
 
+  const imageDeleter: ImageDeleter = container.get(
+    UtilDependencies.ImageDeleter
+  );
+
   container.setService(
     ActivityUsesCases.ActivityCreator,
     (c) =>
@@ -39,7 +44,7 @@ export const injectActivityUsesCases = (container: IOC): IOC => {
   );
   container.setService(
     ActivityUsesCases.ActivityDeleter,
-    () => new ActivityEliminator(activityRepository, imageRepository)
+    () => new ActivityEliminator(activityRepository, imageDeleter)
   );
   container.setService(
     ActivityUsesCases.ActivityFinder,

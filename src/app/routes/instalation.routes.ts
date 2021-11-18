@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { CreateInstalationController } from '../controllers/instalation/createInstalation.controller';
-import { DeleteInstalationImageController } from '../controllers/instalation/deleteImage.controller';
 import { DeleteInstalationController } from '../controllers/instalation/deleteInstalation.controller';
 import { GetAllInstalationController } from '../controllers/instalation/getAllInstalations.controller';
 import { GetInstalationController } from '../controllers/instalation/getInstalation.controller';
@@ -22,7 +21,6 @@ const uploadImage = new UploadInstalationImageController();
 const getAllInstalations = new GetAllInstalationController();
 const getInstalation = new GetInstalationController();
 const deleteInstalation = new DeleteInstalationController();
-const deleteImage = new DeleteInstalationImageController();
 const updateInstalation = new UpdateInstalationController();
 
 instalationRouter.post(
@@ -44,12 +42,6 @@ instalationRouter.delete(
   '/',
   [verifyToken.run, verifyRole.run],
   deleteInstalation.run
-);
-
-instalationRouter.delete(
-  '/image',
-  [verifyToken.run, verifyRole.run],
-  deleteImage.run
 );
 
 instalationRouter.put(

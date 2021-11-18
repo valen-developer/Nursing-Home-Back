@@ -19,14 +19,6 @@ export class DeleteActivityController implements Controller {
       );
       await activityDeleter.delete(uuid as string);
 
-      const fileDeleter: FileDeleter = container.get(
-        UtilDependencies.FileDeleter
-      );
-      const countFileDeleted = await fileDeleter.byNameMatch(
-        enviroment.publicFolder,
-        uuid as string
-      );
-
       res.json({ ok: true });
     } catch (error) {
       errorHandler(res, error, 'delete activity controller');

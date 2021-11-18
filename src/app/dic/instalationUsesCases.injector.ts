@@ -4,6 +4,7 @@ import { InstalationEliminator } from '../../context/Instalation/application/Ins
 import { InstalationFinder } from '../../context/Instalation/application/InstalationFinder';
 import { InstalationUpdater } from '../../context/Instalation/application/InstalationUpdater';
 import { InstalationRepository } from '../../context/Instalation/domain/interfaces/instalation.respository';
+import { ImageDeleter } from '../../context/shared/application/imageDeleter';
 import { ImageRepository } from '../../context/shared/domain/interfaces/image.repository';
 import { Repositories } from './repositories.injector';
 import { UtilDependencies } from './utils.inhector';
@@ -21,6 +22,7 @@ export const injectInstalationUsesCases = (c: IOC): IOC => {
   );
 
   const imageRepository: ImageRepository = c.get(Repositories.ImageRepository);
+  const imageDeleter: ImageDeleter = c.get(UtilDependencies.ImageDeleter);
 
   c.setService(
     InstalationUsesCases.InstalationCreator,
@@ -37,7 +39,7 @@ export const injectInstalationUsesCases = (c: IOC): IOC => {
   );
   c.setService(
     InstalationUsesCases.InstalationEliminator,
-    () => new InstalationEliminator(instalationRepository, imageRepository)
+    () => new InstalationEliminator(instalationRepository, imageDeleter)
   );
   c.setService(
     InstalationUsesCases.InstalationUpdater,
