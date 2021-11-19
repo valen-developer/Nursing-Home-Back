@@ -6,6 +6,7 @@ import { container } from '../../..';
 import { JobCreater } from '../../../context/Jobs/application/JobCreater';
 import { JobUpdater } from '../../../context/Jobs/application/JobUpdater';
 import { Job } from '../../../context/Jobs/domain/job.model';
+import { FileDeleter } from '../../../context/shared/application/fileDeleter';
 import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
 import { asyncForEach } from '../../../helpers/asynForeach';
 import { errorHandler } from '../../../helpers/errorHandler';
@@ -28,6 +29,10 @@ export class CreateJobController implements Controller {
       form.parse(req, async (err, fields, files) => {
         try {
           if (err) throw new Error('server error');
+
+          const fileDeleter: FileDeleter = container.get(
+            UtilDependencies.FileDeleter
+          );
 
           const { jobUuid: uuid, name, description } = fields;
 
@@ -54,7 +59,9 @@ export class CreateJobController implements Controller {
           // Create job
           const jobCreater: JobCreater = container.get(JobUsesCases.JobCreator);
           await jobCreater.create(job).catch((err) => {
-            fileArray.forEach((f) => fs.unlinkSync(f.path));
+            imagePaths.forEach((path) =>
+              fileDeleter.byNameMatch(uploadDir, path)
+            );
 
             throw err;
           });

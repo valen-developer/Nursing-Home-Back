@@ -68,6 +68,10 @@ export class MongoActivityRepository implements ActivityRepository {
         { uuid: activity.uuid.value },
         activity.toObject()
       );
+      console.log(
+        '🚀 -> MongoActivityRepository -> update -> response',
+        response
+      );
 
       return activity;
     } catch (error) {

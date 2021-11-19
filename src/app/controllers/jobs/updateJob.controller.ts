@@ -1,41 +1,43 @@
 import { Request, Response } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
 import formidable from 'formidable';
+import { ParsedQs } from 'qs';
 import { container } from '../../..';
-import { InstalationFinder } from '../../../context/Instalation/application/InstalationFinder';
-import { InstalationUpdater } from '../../../context/Instalation/application/InstalationUpdater';
-import { Instalation } from '../../../context/Instalation/domain/instalation.model';
+import { JobFinder } from '../../../context/Jobs/application/JobFinder';
+import { JobUpdater } from '../../../context/Jobs/application/JobUpdater';
+import { Job } from '../../../context/Jobs/domain/job.model';
+import { FileDeleter } from '../../../context/shared/application/fileDeleter';
 import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
 import { errorHandler } from '../../../helpers/errorHandler';
 import { enviroment } from '../../config/enviroment';
-import { InstalationUsesCases } from '../../dic/instalationUsesCases.injector';
+import { JobUsesCases } from '../../dic/jobUsesCases.injector';
 import { UtilDependencies } from '../../dic/utils.inhector';
-
 import { Controller } from '../controller.interface';
 
-export class UpdateInstalationController implements Controller {
+export class UpdateJobController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
     const { uuid } = req.params;
 
     const destinationFolder = enviroment.publicFolder;
 
     const form = formidable({
-      uploadDir: destinationFolder,
       multiples: true,
+      uploadDir: destinationFolder,
     });
 
     try {
       form.parse(req, async (err, fields, files) => {
         if (err) throw new Error('server error');
+
         try {
-          // get dependencies
-          const instalationFinder: InstalationFinder = container.get(
-            InstalationUsesCases.InstalationFinder
-          );
-          const instalationUpdater: InstalationUpdater = container.get(
-            InstalationUsesCases.InstalationUpdater
-          );
+          // dependencies
+          const jobFinder: JobFinder = container.get(JobUsesCases.JobFinder);
+          const jobUpdater: JobUpdater = container.get(JobUsesCases.JobUpdate);
           const fileUploader: FileUploader = container.get(
             UtilDependencies.FileUploader
+          );
+          const fileDeleter: FileDeleter = container.get(
+            UtilDependencies.FileDeleter
           );
 
           const { name, description } = fields;
@@ -43,39 +45,37 @@ export class UpdateInstalationController implements Controller {
           const fileArray =
             files.file instanceof Array ? files.file : [files.file];
 
-          const instalation = await instalationFinder.get(uuid);
-          const updatedInstalation = new Instalation({
-            uuid: instalation.uuid.value,
+          const job = await jobFinder.get(uuid);
+          const updatedJob = new Job({
+            uuid: job.uuid.value,
             name: name as string,
             description: description as string,
-            imagePaths: [],
+            imagePaths: job.imagePaths,
           });
 
           const imagesPath = await fileUploader.uploadAll(
             fileArray,
-            instalation.uuid.value,
+            updatedJob.uuid.value,
             destinationFolder
           );
-          updatedInstalation.setImages(imagesPath);
+          updatedJob.setImages(imagesPath);
 
-          await instalationUpdater.update(updatedInstalation).catch((err) => {
-            console.log(
-              '🚀 -> UpdateInstalationController -> awaitinstalationUpdater.update -> err',
-              err
+          await jobUpdater.update(updatedJob).catch((err) => {
+            imagesPath.forEach((path) =>
+              fileDeleter.byNameMatch(destinationFolder, path)
             );
-
-            throw new Error('server error');
+            throw err;
           });
 
           res.json({
             ok: true,
           });
         } catch (error) {
-          errorHandler(res, error, 'update activity controller');
+          errorHandler(res, error, 'update job controller');
         }
       });
     } catch (error) {
-      errorHandler(res, error, 'update activity controller');
+      errorHandler(res, error, 'update job controller');
     }
   }
 }

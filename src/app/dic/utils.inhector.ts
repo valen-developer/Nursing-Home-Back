@@ -27,9 +27,10 @@ export const enum UtilDependencies {
 export const injectUtils = (container: IOC): IOC => {
   container.setService(UtilDependencies.JWT, () => new JWT());
   container.setService(UtilDependencies.Crypt, () => new Bcrypt());
+
   container.setService(
-    UtilDependencies.FileUploader,
-    () => new FormFileUploader()
+    UtilDependencies.UuidGenerator,
+    () => new UuidGenerator()
   );
 
   const mailerTransport: TransporterMailer = {
@@ -45,17 +46,17 @@ export const injectUtils = (container: IOC): IOC => {
     () => new NodeMailer(mailerTransport)
   );
 
-  container.setService(
-    UtilDependencies.UuidGenerator,
-    () => new UuidGenerator()
-  );
-
   container.setService(UtilDependencies.FileDeleter, () => new FileDeleter());
 
   container.setService(
     UtilDependencies.ImageDeleter,
     (c) =>
       new ImageDeleter(c.get(Repositories.ImageRepository), new FileDeleter())
+  );
+
+  container.setService(
+    UtilDependencies.FileUploader,
+    (c) => new FormFileUploader(c.get(UtilDependencies.UuidGenerator))
   );
 
   return container;

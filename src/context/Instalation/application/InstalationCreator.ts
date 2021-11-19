@@ -13,10 +13,12 @@ export class InstalationCreator {
   ) {}
 
   public async create(instalation: Instalation): Promise<void> {
+    await this.instalationRepository.create(instalation);
+
     const images = instalation.imagePaths.map(
       (path) =>
         new Image({
-          path: path.value,
+          path: path,
           uuid: this.uuid.generate(),
           entityUuid: instalation.uuid.value,
         })
@@ -26,7 +28,5 @@ export class InstalationCreator {
       images,
       async (image) => await this.imageRepository.create(image)
     );
-
-    await this.instalationRepository.create(instalation);
   }
 }

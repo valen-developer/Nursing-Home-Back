@@ -14,6 +14,8 @@ export class ActivityCreator {
   ) {}
 
   async create(activity: Activity): Promise<void> {
+    await this.activityRepository.create(activity);
+
     const images = activity.imagePaths.map(
       (path) =>
         new Image({
@@ -27,7 +29,5 @@ export class ActivityCreator {
       images,
       async (image) => await this.imageRepository.create(image)
     );
-
-    return this.activityRepository.create(activity);
   }
 }

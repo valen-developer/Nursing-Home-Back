@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
 import formidable from 'formidable';
-import path from 'path';
 import fs from 'fs';
 
+import { FileDeleter } from '../../../context/shared/application/fileDeleter';
 import { container } from '../../..';
 import { InstalationCreator } from '../../../context/Instalation/application/InstalationCreator';
 import { Instalation } from '../../../context/Instalation/domain/instalation.model';
 import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
-import { asyncForEach } from '../../../helpers/asynForeach';
 import { errorHandler } from '../../../helpers/errorHandler';
 import { InstalationUsesCases } from '../../dic/instalationUsesCases.injector';
 import { UtilDependencies } from '../../dic/utils.inhector';
 import { Controller } from '../controller.interface';
-import { InstalationUpdater } from '../../../context/Instalation/application/InstalationUpdater';
 import { enviroment } from '../../config/enviroment';
 
 export class CreateInstalationController implements Controller {
@@ -28,6 +26,10 @@ export class CreateInstalationController implements Controller {
       form.parse(req, async (err, fields, files) => {
         try {
           if (err) throw new Error('server error');
+
+          const fileDeleter: FileDeleter = container.get(
+            UtilDependencies.FileDeleter
+          );
 
           const { instalationUuid, name, description } = fields;
 
@@ -59,7 +61,9 @@ export class CreateInstalationController implements Controller {
             InstalationUsesCases.InstalationCreator
           );
           await instalationCreator.create(instalation).catch((err) => {
-            fileArray.forEach((f) => fs.unlinkSync(f.path));
+            imagePaths.forEach((path) =>
+              fileDeleter.byNameMatch(destinationFolder, path)
+            );
 
             throw err;
           });

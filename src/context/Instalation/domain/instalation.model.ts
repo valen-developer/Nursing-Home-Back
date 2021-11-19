@@ -16,8 +16,8 @@ export class Instalation {
     this._imagePaths = instalation.imagePaths.map((i) => new ImagePath(i));
   }
 
-  get imagePaths(): ImagePath[] {
-    return this._imagePaths;
+  get imagePaths(): string[] {
+    return this._imagePaths.map((i) => i.value);
   }
 
   public toObject(): InstalationObject {
@@ -25,7 +25,7 @@ export class Instalation {
       uuid: this.uuid.value,
       name: this.name.value,
       description: this.description.value,
-      imagePaths: this._imagePaths.map((i) => i.value),
+      imagePaths: this.imagePaths,
     };
   }
 

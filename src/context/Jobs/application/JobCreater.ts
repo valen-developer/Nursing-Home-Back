@@ -13,6 +13,8 @@ export class JobCreater {
   ) {}
 
   public async create(job: Job): Promise<void> {
+    await this.jobRepository.create(job);
+
     const images = job.imagePaths.map(
       (path) =>
         new Image({
@@ -26,7 +28,5 @@ export class JobCreater {
       images,
       async (image) => await this.imageRepository.create(image)
     );
-
-    await this.jobRepository.create(job);
   }
 }

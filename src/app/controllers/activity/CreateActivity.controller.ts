@@ -4,10 +4,9 @@ import fs from 'fs';
 
 import { container } from '../../..';
 import { ActivityCreator } from '../../../context/Activity/application/ActivityCreator';
-import { ActivityUpdater } from '../../../context/Activity/application/ActivityUpdater';
 import { Activity } from '../../../context/Activity/domain/activity.model';
+import { FileDeleter } from '../../../context/shared/application/fileDeleter';
 import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
-import { asyncForEach } from '../../../helpers/asynForeach';
 
 import { errorHandler } from '../../../helpers/errorHandler';
 import { enviroment } from '../../config/enviroment';
@@ -28,6 +27,10 @@ export class CreateActivityController implements Controller {
       form.parse(req, async (err, fields, files) => {
         try {
           if (err) throw new Error('server error');
+
+          const fileDeleter: FileDeleter = container.get(
+            UtilDependencies.FileDeleter
+          );
 
           const { activityUuid, name, description } = fields;
 
@@ -59,7 +62,9 @@ export class CreateActivityController implements Controller {
             ActivityUsesCases.ActivityCreator
           );
           await activityCreator.create(activity).catch((err) => {
-            imagePaths.forEach((path) => fs.unlinkSync(path));
+            imagePaths.forEach((path) =>
+              fileDeleter.byNameMatch(destinationFolder, path)
+            );
 
             throw err;
           });

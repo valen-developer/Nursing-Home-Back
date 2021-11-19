@@ -43,7 +43,12 @@ export const injectInstalationUsesCases = (c: IOC): IOC => {
   );
   c.setService(
     InstalationUsesCases.InstalationUpdater,
-    () => new InstalationUpdater(instalationRepository)
+    (c) =>
+      new InstalationUpdater(
+        instalationRepository,
+        c.get(Repositories.ImageRepository),
+        c.get(UtilDependencies.UuidGenerator)
+      )
   );
 
   return c;

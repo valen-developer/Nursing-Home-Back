@@ -5,10 +5,11 @@ import formidable, { File as FileForm } from 'formidable';
 import { FileUploader } from '../domain/interfaces/fileUploader.interface';
 import { HTTPException } from '../domain/httpException';
 import { asyncForEach } from '../../../helpers/asynForeach';
+import { UuidGenerator } from './uuidGenerator';
 
 export class FormFileUploader implements FileUploader {
   public aviableExtensions: string[] = ['png', 'jpeg', 'jpg'];
-  constructor() {}
+  constructor(private uuidGenerator: UuidGenerator) {}
 
   /**
    *
@@ -21,9 +22,8 @@ export class FormFileUploader implements FileUploader {
     file: FileForm,
     fileName: string,
     destinationPath: string
-  ): Promise<string> {
-    if (!file)
-      throw new HTTPException('FormFileUploader', 'not file found', 400);
+  ): Promise<string | null> {
+    if (!file) return null;
 
     const fileExtension = this.extractExtension(file.name ?? '');
 
@@ -62,9 +62,9 @@ export class FormFileUploader implements FileUploader {
   ): Promise<string[]> {
     let imagePaths: string[] = [];
     await asyncForEach<formidable.File>(files, async (f, i) => {
-      const ipath: string = await this.upload(
+      const ipath: string | null = await this.upload(
         f,
-        `${fileName}-${i}`,
+        `${fileName}-${this.uuidGenerator.generate()}`,
         destinationPath
       );
 

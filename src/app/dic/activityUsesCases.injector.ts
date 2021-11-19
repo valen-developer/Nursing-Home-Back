@@ -40,7 +40,12 @@ export const injectActivityUsesCases = (container: IOC): IOC => {
   );
   container.setService(
     ActivityUsesCases.ActivityUpdater,
-    () => new ActivityUpdater(activityRepository)
+    (c) =>
+      new ActivityUpdater(
+        activityRepository,
+        c.get(Repositories.ImageRepository),
+        c.get(UtilDependencies.UuidGenerator)
+      )
   );
   container.setService(
     ActivityUsesCases.ActivityDeleter,

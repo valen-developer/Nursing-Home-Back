@@ -40,7 +40,15 @@ export const injectJobUsesCases = (c: IOC): IOC => {
     () => new JobFinder(jobRepository, imageRepository)
   );
 
-  c.setService(JobUsesCases.JobUpdate, () => new JobUpdater(jobRepository));
+  c.setService(
+    JobUsesCases.JobUpdate,
+    (c) =>
+      new JobUpdater(
+        jobRepository,
+        c.get(Repositories.ImageRepository),
+        c.get(UtilDependencies.UuidGenerator)
+      )
+  );
 
   return c;
 };
