@@ -10,22 +10,28 @@ export class ImageDeleter {
     private fileDeleter: FileDeleter
   ) {}
 
-  async delete(uuid: string): Promise<ImageObject> {
+  async delete(
+    uuid: string,
+    folder = enviroment.publicFolder
+  ): Promise<ImageObject> {
     const deletedImage = await this.imageRepository.delete(uuid);
 
     if (deletedImage) {
-      this.fileDeleter.byNameMatch(enviroment.publicFolder, deletedImage.path);
+      this.fileDeleter.byNameMatch(folder, deletedImage.path);
     }
 
     return deletedImage;
   }
 
-  async deleteByEntityUuid(entityUuid: string): Promise<ImageObject[]> {
+  async deleteByEntityUuid(
+    entityUuid: string,
+    folder = enviroment.publicFolder
+  ): Promise<ImageObject[]> {
     const deletedImages: ImageObject[] =
       (await this.imageRepository.deleteAllByEntity(entityUuid)) ?? [];
 
     deletedImages.forEach((image) => {
-      this.fileDeleter.byNameMatch(enviroment.publicFolder, image.path);
+      this.fileDeleter.byNameMatch(folder, image.path);
     });
 
     return deletedImages;

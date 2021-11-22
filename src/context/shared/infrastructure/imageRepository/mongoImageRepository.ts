@@ -12,7 +12,6 @@ export class MongoImageRepository implements ImageRepository {
   }
 
   async create(image: Image): Promise<Image> {
-    console.log('🚀 -> MongoImageRepository -> create -> image', image);
     const imageMongoModel = new ImageMongoModel(image.toObject());
 
     try {

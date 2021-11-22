@@ -30,11 +30,16 @@ export const injectUserUsesCases = (container: IOC): IOC => {
   );
   container.setService(
     UserUsesCases.UserFinder,
-    () => new UserFinder(userRepository)
+    (c) => new UserFinder(userRepository, c.get(Repositories.ImageRepository))
   );
   container.setService(
     UserUsesCases.UserUpdater,
-    () => new UserUpdater(userRepository)
+    (c) =>
+      new UserUpdater(
+        userRepository,
+        c.get(Repositories.ImageRepository),
+        c.get(UtilDependencies.UuidGenerator)
+      )
   );
 
   container.setService(UserUsesCases.LoginUser, (c) => {

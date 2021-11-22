@@ -4,7 +4,7 @@ import { DeleteUserController } from '../controllers/users/deleteUser.controller
 import { GetAllUsersController } from '../controllers/users/getAllUsers.controller';
 import { GetUserController } from '../controllers/users/getUser.controller';
 import { GetUserByEmailController } from '../controllers/users/getUserByEmail.controller';
-import { UpdateUserImageController } from '../controllers/users/updateUserImage.controller';
+import { UpdateUserController } from '../controllers/users/updateUser.controller';
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
 import { VerifyTokenMiddleware } from '../middlewares/verifyToken.middleware';
 
@@ -16,10 +16,10 @@ const verifyRole = new VerifyROLEMiddleware();
 
 // Controllers
 const deleteUserController = new DeleteUserController();
-const updateImge = new UpdateUserImageController();
 const getAllUsers = new GetAllUsersController();
 const getUser = new GetUserController();
 const getUserByEmail = new GetUserByEmailController();
+const updateUser = new UpdateUserController();
 
 userRouter.get('/all', [verifyToken.run, verifyRole.run], getAllUsers.run);
 userRouter.get('/:userUuid', [verifyToken.run], getUser.run);
@@ -31,4 +31,4 @@ userRouter.delete(
   deleteUserController.run
 );
 
-userRouter.post('/image', [verifyToken.run], updateImge.run);
+userRouter.put('', [verifyToken.run], updateUser.run);

@@ -23,6 +23,7 @@ export class User {
     this.password = new UserPassword(userObject.password);
     this._role = new UserROLE(userObject.role);
     this._userState = UserState.fromBoolean(userObject.validated ?? false);
+    this._image = new UserImage(userObject.image ?? '');
   }
 
   get validated(): boolean {

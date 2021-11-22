@@ -1,6 +1,7 @@
 import { HTTPException } from '../../shared/domain/httpException';
 import { UserCacheRepository } from '../domain/interfaces/UserCacheRepository.interface';
 import { User } from '../domain/user.model';
+import { UserFinder } from './UserFinder';
 
 export class LoginToken {
   constructor(private userCacheRepository: UserCacheRepository) {}
@@ -16,7 +17,6 @@ export class LoginToken {
 
   private async getFromCache(uuid: string): Promise<User | null> {
     const userObject = await this.userCacheRepository.getUserByEmail(uuid);
-
     if (!userObject) return null;
 
     return new User(userObject);

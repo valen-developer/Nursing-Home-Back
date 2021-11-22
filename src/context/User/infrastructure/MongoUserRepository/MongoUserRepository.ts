@@ -43,7 +43,7 @@ export class MongoUserRepository implements UserRepository {
     try {
       await UserMongoModel.findOneAndUpdate(
         { uuid: user.uuid.value },
-        user.toObject()
+        user.toObjectWithoutPassword()
       );
       return user;
     } catch (error) {
