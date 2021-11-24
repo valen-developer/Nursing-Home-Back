@@ -69,7 +69,7 @@ export class CreateActivityController implements Controller {
             throw err;
           });
 
-          res.json({ ok: true });
+          res.json({ ok: true, activity: activity.toObject() });
         } catch (error) {
           errorHandler(res, error, 'create activity controller');
         }

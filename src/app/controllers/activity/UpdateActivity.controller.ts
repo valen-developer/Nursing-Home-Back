@@ -68,7 +68,7 @@ export class UpdateActivityController implements Controller {
             throw err;
           });
 
-          res.json({ ok: true });
+          res.json({ ok: true, activity: updatedActivity.toObject() });
         } catch (error) {
           errorHandler(res, error, 'update activity controller');
         }

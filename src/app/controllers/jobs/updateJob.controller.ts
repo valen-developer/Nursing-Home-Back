@@ -69,6 +69,7 @@ export class UpdateJobController implements Controller {
 
           res.json({
             ok: true,
+            job: updatedJob.toObject(),
           });
         } catch (error) {
           errorHandler(res, error, 'update job controller');

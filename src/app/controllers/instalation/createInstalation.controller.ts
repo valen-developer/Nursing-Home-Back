@@ -68,7 +68,7 @@ export class CreateInstalationController implements Controller {
             throw err;
           });
 
-          res.json({ ok: true });
+          res.json({ ok: true, instalation: instalation.toObject() });
         } catch (error) {
           errorHandler(res, error, 'create instalation controller');
         }

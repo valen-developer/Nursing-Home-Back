@@ -68,6 +68,7 @@ export class CreateJobController implements Controller {
 
           res.json({
             ok: true,
+            job: job.toObject(),
           });
         } catch (error) {
           errorHandler(res, error, 'create job controller');

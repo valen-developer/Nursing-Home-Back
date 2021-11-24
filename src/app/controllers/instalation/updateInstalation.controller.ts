@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import formidable from 'formidable';
+import fs from 'fs';
+
 import { container } from '../../..';
 import { InstalationFinder } from '../../../context/Instalation/application/InstalationFinder';
 import { InstalationUpdater } from '../../../context/Instalation/application/InstalationUpdater';
@@ -59,16 +61,14 @@ export class UpdateInstalationController implements Controller {
           updatedInstalation.setImages(imagesPath);
 
           await instalationUpdater.update(updatedInstalation).catch((err) => {
-            console.log(
-              '🚀 -> UpdateInstalationController -> awaitinstalationUpdater.update -> err',
-              err
-            );
+            imagesPath.forEach((path) => fs.unlinkSync(path));
 
             throw new Error('server error');
           });
 
           res.json({
             ok: true,
+            instalation: updatedInstalation.toObject(),
           });
         } catch (error) {
           errorHandler(res, error, 'update activity controller');
