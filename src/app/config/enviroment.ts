@@ -25,4 +25,5 @@ export const enviroment = {
   publicFolder: path.join(__dirname, '../../..', 'public'),
   fileFolderPath:
     process.env.FILES_FOLDER_PATH || path.join(__dirname, '../../..', 'files'),
+  appUrl: process.env.APP_URL || 'http://localhost:4200',
 };

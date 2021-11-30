@@ -40,7 +40,7 @@ export class SignupController implements Controller {
         enviroment.mailer.appMail,
         email,
         'Registro en Retamal Centro de día',
-        `Regístrese en el siguiente enlace: <a href="http://localhost:4200/auth/validate-user/${token}">Regístrese</a>`
+        `Regístrese en el siguiente enlace: <a href="${enviroment.appUrl}/auth/validate-user/${token}">Regístrese</a>`
       );
 
       if (isMailSent) {
