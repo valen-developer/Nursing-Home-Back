@@ -14,12 +14,22 @@ export class MongoPlateRepository implements PlateRepository {
   }
 
   async getPlatesByDate(date: Date): Promise<Plate[]> {
+    console.log('🚀 -> MongoPlateRepository -> getPlatesByDate -> date', date);
+
     try {
-      const plates: PlateObject[] = await PlateMongoModel.findOne({
-        date: date,
+      // find in mongo by current day
+      const platesObject: PlateObject[] = await PlateMongoModel.find({
+        date: {
+          $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          $lt: new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + 1
+          ),
+        },
       });
 
-      return plates.map((plate) => new Plate(plate));
+      return platesObject.map((plate) => new Plate(plate));
     } catch (error) {
       return [];
     }

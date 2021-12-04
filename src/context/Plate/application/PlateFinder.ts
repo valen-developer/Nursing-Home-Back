@@ -30,6 +30,8 @@ export class PlateFinder {
   }
 
   public async findByDate(date: Date): Promise<Plate[]> {
+    date = new Date(date);
+
     const plates = await this.plateRepository.getPlatesByDate(date);
 
     await asyncForEach<Plate>(plates, async (plate) => {

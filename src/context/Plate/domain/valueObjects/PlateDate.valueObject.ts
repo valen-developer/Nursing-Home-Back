@@ -6,6 +6,6 @@ export class PlateDate extends NotNull implements ValueObject {
 
   constructor(value: Date) {
     super(value, 'plate date');
-    this.value = value;
+    this.value = new Date(value);
   }
 }
