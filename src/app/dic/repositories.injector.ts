@@ -3,6 +3,7 @@ import { MongoActivityRepository } from '../../context/Activity/infrastructure/m
 
 import { MongoInstalationRepository } from '../../context/Instalation/infrastructure/mongoInstalationRepository/mongoInstalationRepository';
 import { MongoJobRepository } from '../../context/Jobs/infrastructure/mongoJobRepository/mongoJob.respository';
+import { MongoPlateRepository } from '../../context/Plate/infrastructure/mongoPlateRepository/mongoPlateRepository';
 import { MongoImageRepository } from '../../context/shared/infrastructure/imageRepository/mongoImageRepository';
 import { MongoUserRepository } from '../../context/User/infrastructure/MongoUserRepository/MongoUserRepository';
 import { RedisUserCacheRepository } from '../../context/User/infrastructure/RedisUserCacheRepository';
@@ -14,6 +15,7 @@ export const enum Repositories {
   JobRepository = 'JobRepository',
   ActivityRepository = 'ActivityRepository',
   ImageRepository = 'ImageRepository',
+  PlateRepository = 'PlateRepository',
 }
 
 export const injectRepositories = (container: IOC): IOC => {
@@ -45,6 +47,11 @@ export const injectRepositories = (container: IOC): IOC => {
   container.setService(
     Repositories.ActivityRepository,
     () => new MongoActivityRepository()
+  );
+
+  container.setService(
+    Repositories.PlateRepository,
+    () => new MongoPlateRepository()
   );
 
   return container;
