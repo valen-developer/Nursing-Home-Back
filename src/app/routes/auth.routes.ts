@@ -6,6 +6,7 @@ import { LoginController } from '../controllers/auth/login.controller';
 import { LoginTokenController } from '../controllers/auth/loginToken.controller';
 import { RecoveryPasswordController } from '../controllers/auth/recoveryPassword.controller';
 import { SignupController } from '../controllers/auth/signup.controller';
+import { TurnUserAdminController } from '../controllers/auth/turnUserAdmin.controller';
 import { ValidateNewUserController } from '../controllers/auth/validateNewUser.controller';
 import { ValidateUserController } from '../controllers/auth/validateUser.controller';
 
@@ -27,6 +28,13 @@ const loginTokenUserController = new LoginTokenController();
 const validateUserController = new ValidateUserController();
 const changePasswordController = new ChangePasswordController();
 const recoveryPassword = new RecoveryPasswordController();
+const turnUserAdmin = new TurnUserAdminController();
+
+authRouter.patch(
+  '/turn-admin/:uuid',
+  [verifyToken.run, verifyRole.run],
+  turnUserAdmin.run
+);
 
 // Auth
 authRouter.post('/signup', signupController.run);
