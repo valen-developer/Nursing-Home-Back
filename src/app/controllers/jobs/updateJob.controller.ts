@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import { ParamsDictionary } from 'express-serve-static-core';
 import formidable from 'formidable';
-import { ParsedQs } from 'qs';
 import { container } from '../../..';
 import { JobFinder } from '../../../context/Jobs/application/JobFinder';
 import { JobUpdater } from '../../../context/Jobs/application/JobUpdater';

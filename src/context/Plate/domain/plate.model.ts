@@ -19,7 +19,7 @@ export class Plate {
     this.description = new PlateDescription(plate.description);
     this.receipe = new PlateReceipe(plate.receipe);
     this.date = new PlateDate(plate.date);
-    this._images = plate.imagePaths.map((image) => new ImagePath(image));
+    this._images = plate.imagePaths.map((image) => new ImagePath(image)) ?? [];
   }
 
   get imagePaths(): string[] {
