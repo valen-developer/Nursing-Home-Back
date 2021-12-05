@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { DeletePublicFileController } from '../controllers/public/deletePublicFile';
+import { DeletePublicFileController } from '../controllers/public-controllers/deletePublicFile';
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
 import { VerifyTokenMiddleware } from '../middlewares/verifyToken.middleware';
 
