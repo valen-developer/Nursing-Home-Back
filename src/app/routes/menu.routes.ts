@@ -26,10 +26,6 @@ menuRouter.post('/', [verifyToken.run, verifyRole.run], createMenu.run);
 menuRouter.put('/:uuid', [verifyToken.run, verifyRole.run], updateMenu.run);
 menuRouter.delete('/:uuid', [verifyToken.run, verifyRole.run], deleteMenu.run);
 
-menuRouter.get(
-  '/date/:date',
-  [verifyToken.run, verifyRole.run],
-  getMenuByDate.run
-);
-menuRouter.get('/all', [verifyToken.run, verifyRole.run], getAllMenu.run);
-menuRouter.get('/:uuid', [verifyToken.run, verifyRole.run], getMenu.run);
+menuRouter.get('/date/:date', getMenuByDate.run);
+menuRouter.get('/all', getAllMenu.run);
+menuRouter.get('/:uuid', getMenu.run);

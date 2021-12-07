@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import formidable from 'formidable';
 import { container } from '../../..';
+import { MenuFinder } from '../../../context/Menu/application/MenuFinder';
 import { PlateCreator } from '../../../context/Plate/application/PlateCreator';
 import { Plate, PlateObject } from '../../../context/Plate/domain/plate.model';
 import { FileDeleter } from '../../../context/shared/application/fileDeleter';
+import { HTTPException } from '../../../context/shared/domain/httpException';
 import { errorHandler } from '../../../helpers/errorHandler';
 import { enviroment } from '../../config/enviroment';
+import { MenuUsesCasesInjector } from '../../dic/menuUsesCases.injector';
 import { PlateUsesCases } from '../../dic/plateUsesCases.injector';
 import { UtilDependencies } from '../../dic/utils.inhector';
 import { Controller } from '../controller.interface';
@@ -23,8 +26,20 @@ export class PlateCreateController implements Controller {
       form.parse(req, async (err, fields, files) => {
         try {
           if (err) throw new Error('server error');
-
           const plateObject = fields as unknown as PlateObject;
+
+          const menuFinder: MenuFinder = container.get(
+            MenuUsesCasesInjector.MenuFinder
+          );
+          const menu = await menuFinder.findByUuid(plateObject.menuUuid);
+          const isValidDate = menu.date.isSameDay(new Date(plateObject.date));
+
+          if (!isValidDate)
+            throw new HTTPException(
+              'invalid date',
+              `day must be same than menu: ${menu.date.value}`,
+              400
+            );
 
           const fileArray =
             files.file instanceof Array ? files.file : [files.file];
