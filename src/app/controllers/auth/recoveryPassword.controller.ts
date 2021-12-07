@@ -19,7 +19,6 @@ export class RecoveryPasswordController implements Controller {
     try {
       const userfinder: UserFinder = container.get(UserUsesCases.UserFinder);
       const user = await userfinder.getByEmail(email);
-      console.log('🚀 -> RecoveryPasswordController -> run -> user', user);
       const jwt: JWT = container.get(UtilDependencies.JWT);
 
       const token = jwt.sign({ uuid: user.uuid.value }, enviroment.token.seed, {

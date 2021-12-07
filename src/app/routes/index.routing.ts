@@ -5,6 +5,7 @@ import { generalRoutes } from './general.routes';
 import { imageRouter } from './image.routes';
 import { instalationRouter } from './instalation.routes';
 import { jobRouter } from './job.routes';
+import { menuRouter } from './menu.routes';
 import { plateRouter } from './plate.routes';
 import { userRouter } from './user.routes';
 
@@ -16,6 +17,7 @@ router.use('/instalation', instalationRouter);
 router.use('/job', jobRouter);
 router.use('/activity', activityRouter);
 router.use('/image', imageRouter);
+router.use('/menu', menuRouter);
 router.use('/plate', plateRouter);
 
 router.use('', generalRoutes);

@@ -10,7 +10,6 @@ import { Controller } from '../controller.interface';
 export class DeleteJobController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
     const { uuid } = req.params;
-    console.log('🚀 -> DeleteJobController -> run -> uuid', uuid);
 
     try {
       const jobDeleter: JobEliminator = container.get(

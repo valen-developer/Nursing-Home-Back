@@ -44,7 +44,6 @@ export class UserFinder {
     return await this.imageRepository
       .getByEntityUuid(user.uuid.value)
       .then((image) => {
-        console.log('🚀 -> UserFinder -> .then -> image', image);
         if (image.length <= 0) return user;
 
         user.setImagePath(image[0].path.value);

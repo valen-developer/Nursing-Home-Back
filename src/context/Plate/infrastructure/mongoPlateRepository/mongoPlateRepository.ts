@@ -13,9 +13,18 @@ export class MongoPlateRepository implements PlateRepository {
     }
   }
 
-  async getPlatesByDate(date: Date): Promise<Plate[]> {
-    console.log('🚀 -> MongoPlateRepository -> getPlatesByDate -> date', date);
+  async getPlatesByMenu(menuUuid: string): Promise<Plate[]> {
+    try {
+      const platesObject: PlateObject[] = await PlateMongoModel.find({
+        menuUuid,
+      });
+      return platesObject.map((plate) => new Plate(plate));
+    } catch (error) {
+      return [];
+    }
+  }
 
+  async getPlatesByDate(date: Date): Promise<Plate[]> {
     try {
       // find in mongo by current day
       const platesObject: PlateObject[] = await PlateMongoModel.find({

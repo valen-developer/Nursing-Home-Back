@@ -74,7 +74,6 @@ export class UpdateActivityController implements Controller {
         }
       });
     } catch (error) {
-      console.log('🚀 -> UpdateActivityController -> run -> error', error);
       errorHandler(res, error, 'update activity controller');
     }
   }

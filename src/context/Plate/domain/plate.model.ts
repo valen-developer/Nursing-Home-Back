@@ -11,10 +11,15 @@ export class Plate {
   public readonly description: PlateDescription;
   public readonly date: PlateDate;
   public readonly receipe: PlateReceipe;
+
+  public readonly menuUuid: UUID;
+
   private _images: ImagePath[] = [];
 
   constructor(plate: PlateObject) {
     this.uuid = new UUID(plate.uuid);
+    this.menuUuid = new UUID(plate.menuUuid);
+
     this.name = new PlateName(plate.name);
     this.description = new PlateDescription(plate.description);
     this.receipe = new PlateReceipe(plate.receipe);
@@ -38,12 +43,14 @@ export class Plate {
       receipe: this.receipe.value,
       date: this.date.value,
       imagePaths: this.imagePaths,
+      menuUuid: this.menuUuid.value,
     };
   }
 }
 
 export interface PlateObject {
   uuid: string;
+  menuUuid: string;
   name: string;
   description: string;
   imagePaths: string[];

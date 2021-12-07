@@ -21,7 +21,6 @@ export class FileDeleter {
 
   public delete(path: string): boolean {
     const exist = fs.existsSync(path);
-    console.log('🚀 -> FileDeleter -> delete -> exist', exist);
     if (!exist) return false;
 
     fs.unlinkSync(path);

@@ -22,6 +22,19 @@ export class PlateFinder {
     return plates;
   }
 
+  public async findByMenu(menuUuid: string): Promise<Plate[]> {
+    const plates = await this.plateRepository.getPlatesByMenu(menuUuid);
+
+    await asyncForEach<Plate>(plates, async (plate) => {
+      const images = await this.imageRepository.getByEntityUuid(
+        plate.uuid.value
+      );
+      plate.setImages(images.map((image) => image.path.value));
+    });
+
+    return plates;
+  }
+
   public async findByUuid(uuid: string): Promise<Plate> {
     const plate = await this.plateRepository.getPlate(uuid);
     const images = await this.imageRepository.getByEntityUuid(plate.uuid.value);

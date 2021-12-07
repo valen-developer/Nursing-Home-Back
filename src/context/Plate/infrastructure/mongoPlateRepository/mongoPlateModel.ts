@@ -8,6 +8,10 @@ const PlateSchema = new Schema({
     required: true,
     unique: true,
   },
+  menuUuid: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
