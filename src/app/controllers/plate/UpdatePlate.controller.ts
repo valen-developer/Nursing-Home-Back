@@ -49,6 +49,7 @@ export class UpdatePlateController implements Controller {
         const plate = await plateFinder.findByUuid(uuid);
         const updatedPlate = new Plate({
           uuid: plate.uuid.value,
+          menuUuid: plate.menuUuid.value,
           name: plateObject.name,
           description: plateObject.description,
           date: plateObject.date,

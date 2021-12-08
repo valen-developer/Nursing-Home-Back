@@ -3,6 +3,7 @@ import { DeletePlateController } from '../controllers/plate/DeletePlate.controll
 import { GetPlateController } from '../controllers/plate/GetPlate.controller';
 import { GetPlateByDateController } from '../controllers/plate/GetPlateByDate.controller';
 import { GetPlatesController } from '../controllers/plate/GetPlates.controller';
+import { GetPlatesByMenuController } from '../controllers/plate/GetPlatesByMenu.controller';
 import { PlateCreateController } from '../controllers/plate/PlateCreate.controller';
 import { UpdatePlateController } from '../controllers/plate/UpdatePlate.controller';
 import { VerifyROLEMiddleware } from '../middlewares/verifyRole.middleware';
@@ -21,6 +22,7 @@ const deletePlate = new DeletePlateController();
 const getPlates = new GetPlatesController();
 const getPlate = new GetPlateController();
 const getPlatesByDate = new GetPlateByDateController();
+const getPlatesByMenu = new GetPlatesByMenuController();
 
 plateRouter.post('/', [verifyToken.run, verifyRole.run], createPlate.run);
 plateRouter.put('/:uuid', [verifyToken.run, verifyRole.run], updatePlate.run);
@@ -33,3 +35,4 @@ plateRouter.delete(
 plateRouter.get('/all', getPlates.run);
 plateRouter.get('/:uuid', getPlate.run);
 plateRouter.get('/date/:date', getPlatesByDate.run);
+plateRouter.get('/menu/:uuid', getPlatesByMenu.run);
