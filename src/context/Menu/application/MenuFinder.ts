@@ -31,6 +31,17 @@ export class MenuFinder {
     return menus;
   }
 
+  async findByMonth(date: Date): Promise<Menu[]> {
+    const menus = await this.menuRepository.findByMonth(date);
+
+    await asyncForEach(menus, async (menu: Menu) => {
+      const plates = await this.plateFinder.findByMenu(menu.uuid.value);
+      menu.addPlates(plates);
+    });
+
+    return menus;
+  }
+
   async findByUuid(uuid: string): Promise<Menu> {
     const menu = await this.menuRepository.findByUUID(uuid);
     const plates = await this.plateFinder.findByMenu(uuid);

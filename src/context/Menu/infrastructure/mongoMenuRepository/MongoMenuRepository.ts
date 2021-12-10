@@ -33,6 +33,21 @@ export class MongoMenuRepository implements MenuRepository {
     }
   }
 
+  public async findByMonth(date: Date): Promise<Menu[]> {
+    try {
+      const menuObjects: MenuObject[] = await MenuMongoModel.find({
+        date: {
+          $gte: new Date(date.getFullYear(), date.getMonth(), 1),
+          $lt: new Date(date.getFullYear(), date.getMonth() + 1, 1),
+        },
+      });
+
+      return menuObjects.map((menuObject: MenuObject) => new Menu(menuObject));
+    } catch (error) {
+      return [];
+    }
+  }
+
   public async findByUUID(uuid: string): Promise<Menu> {
     try {
       const menu: MenuObject = await MenuMongoModel.findOne({ uuid });
