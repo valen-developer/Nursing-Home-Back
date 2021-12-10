@@ -32,6 +32,10 @@ export class Menu {
     this._plates = [...this._plates, ...this.checkPlates(plates)];
   }
 
+  public clearPlates(): void {
+    this._plates = [];
+  }
+
   public checkPlates(plates: Plate[]): Plate[] {
     return plates.filter((plate) => this.date.isSameDay(plate.date.value));
   }

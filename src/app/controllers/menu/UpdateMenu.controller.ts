@@ -5,8 +5,13 @@ import { container } from '../../..';
 import { MenuFinder } from '../../../context/Menu/application/MenuFinder';
 import { MenuUpdater } from '../../../context/Menu/application/MenuUpdater';
 import { Menu } from '../../../context/Menu/domain/Menu.model';
+import { PlateFinder } from '../../../context/Plate/application/PlateFinder';
+import { PlateUpdater } from '../../../context/Plate/application/PlateUpdater';
+import { Plate } from '../../../context/Plate/domain/plate.model';
+import { asyncForEach } from '../../../helpers/asynForeach';
 import { errorHandler } from '../../../helpers/errorHandler';
 import { MenuUsesCasesInjector } from '../../dic/menuUsesCases.injector';
+import { PlateUsesCases } from '../../dic/plateUsesCases.injector';
 import { Controller } from '../controller.interface';
 
 export class UpdateMenuController implements Controller {
@@ -24,6 +29,7 @@ export class UpdateMenuController implements Controller {
 
       const menu = await menuFinder.findByUuid(uuid);
 
+
       const menuUpdated = new Menu({
         uuid: menu.uuid.value,
         title,
@@ -32,6 +38,34 @@ export class UpdateMenuController implements Controller {
 
       await menuUpdater.update(menuUpdated);
       menuUpdated.addPlates(menu.plates);
+
+
+      const plateFinder: PlateFinder = container.get(PlateUsesCases.PlateFinder);
+      const plateUpdater: PlateUpdater = container.get(PlateUsesCases.PlateUpdater);
+      const plates = await plateFinder.findByMenu(menu.uuid.value);
+      const updatedPlates: Plate[] = [];
+
+      await asyncForEach<Plate>(plates, async (plate) => {
+        const plateHour = plate.date.value.getHours();
+        const newDate = new Date(date).setHours(plateHour);
+        const updatedPlate = new Plate({
+          uuid: plate.uuid.value,
+          name: plate.name.value,
+          description: plate.description.value,
+          menuUuid: menuUpdated.uuid.value,
+          date: new Date(newDate),
+          receipe: plate.receipe.value,
+          imagePaths: plate.imagePaths,
+        });
+
+        await plateUpdater.updatePlate(updatedPlate);
+        updatedPlates.push(updatedPlate);
+
+      })
+
+      menuUpdated.clearPlates();
+      menuUpdated.addPlates(updatedPlates);
+
 
       res.json({
         ok: true,
