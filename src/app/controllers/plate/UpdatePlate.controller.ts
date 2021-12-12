@@ -1,17 +1,18 @@
-import { Request, Response } from 'express';
-import formidable from 'formidable';
-import { container } from '../../..';
-import { PlateFinder } from '../../../context/Plate/application/PlateFinder';
-import { PlateUpdater } from '../../../context/Plate/application/PlateUpdater';
-import { Plate, PlateObject } from '../../../context/Plate/domain/plate.model';
-import { FileDeleter } from '../../../context/shared/application/fileDeleter';
-import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
-import { errorHandler } from '../../../helpers/errorHandler';
-import { enviroment } from '../../config/enviroment';
-import { PlateUsesCases } from '../../dic/plateUsesCases.injector';
-import { UtilDependencies } from '../../dic/utils.inhector';
+import { Request, Response } from "express";
+import formidable from "formidable";
 
-import { Controller } from '../controller.interface';
+import { container } from "../../..";
+import { PlateFinder } from "../../../context/Plate/application/PlateFinder";
+import { PlateUpdater } from "../../../context/Plate/application/PlateUpdater";
+import { Plate, PlateObject } from "../../../context/Plate/domain/plate.model";
+import { FileDeleter } from "../../../context/shared/application/fileDeleter";
+import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
+import { errorHandler } from "../../../helpers/errorHandler";
+import { enviroment } from "../../config/enviroment";
+import { PlateUsesCases } from "../../dic/plateUsesCases.injector";
+import { UtilDependencies } from "../../dic/utils.inhector";
+
+import { Controller } from "../controller.interface";
 
 export class UpdatePlateController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -25,7 +26,7 @@ export class UpdatePlateController implements Controller {
 
     try {
       form.parse(req, async (err, fields, files) => {
-        if (err) throw new Error('server error');
+        if (err) throw new Error("server error");
 
         // Dependencies
         const plateFinder: PlateFinder = container.get(
@@ -63,7 +64,7 @@ export class UpdatePlateController implements Controller {
           uploadDir
         );
 
-        plate.setImages([...plate.imagePaths, ...imagesPath]);
+        updatedPlate.setImages(imagesPath);
 
         await plateUpdater.updatePlate(updatedPlate).catch((err) => {
           imagesPath.forEach((path) =>
@@ -78,7 +79,7 @@ export class UpdatePlateController implements Controller {
         });
       });
     } catch (error) {
-      errorHandler(res, error, 'update plate controller');
+      errorHandler(res, error, "update plate controller");
     }
   }
 }

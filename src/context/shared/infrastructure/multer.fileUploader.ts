@@ -1,10 +1,8 @@
+import formidable, { File as FileForm } from 'formidable';
 import fs from 'fs';
 import path from 'path';
-import formidable, { File as FileForm } from 'formidable';
-
-import { FileUploader } from '../domain/interfaces/fileUploader.interface';
-import { HTTPException } from '../domain/httpException';
 import { asyncForEach } from '../../../helpers/asynForeach';
+import { FileUploader } from '../domain/interfaces/fileUploader.interface';
 import { UuidGenerator } from './uuidGenerator';
 
 export class FormFileUploader implements FileUploader {
@@ -18,11 +16,7 @@ export class FormFileUploader implements FileUploader {
    * @param fileName
    * @param destinationPath
    */
-  public async upload(
-    file: FileForm,
-    fileName: string,
-    destinationPath: string
-  ): Promise<string | null> {
+  public async upload(file: FileForm, fileName: string, destinationPath: string): Promise<string | null> {
     if (!file) return null;
 
     const fileExtension = this.extractExtension(file.name ?? '');
@@ -55,11 +49,7 @@ export class FormFileUploader implements FileUploader {
     return `${fileName}.${fileExtension}`;
   }
 
-  public async uploadAll(
-    files: FileForm[],
-    fileName: string,
-    destinationPath: string
-  ): Promise<string[]> {
+  public async uploadAll(files: FileForm[], fileName: string, destinationPath: string): Promise<string[]> {
     let imagePaths: string[] = [];
     await asyncForEach<formidable.File>(files, async (f, i) => {
       const ipath: string | null = await this.upload(

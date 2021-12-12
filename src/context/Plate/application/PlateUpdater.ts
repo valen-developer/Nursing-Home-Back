@@ -1,9 +1,9 @@
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { Image } from '../../shared/domain/image.model';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { UuidGenerator } from '../../shared/infrastructure/uuidGenerator';
-import { PlateRepository } from '../domain/interfaces/PlateRepository.interface';
-import { Plate } from '../domain/plate.model';
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { Image } from "../../shared/domain/image.model";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { UuidGenerator } from "../../shared/infrastructure/uuidGenerator";
+import { PlateRepository } from "../domain/interfaces/PlateRepository.interface";
+import { Plate } from "../domain/plate.model";
 
 export class PlateUpdater {
   constructor(

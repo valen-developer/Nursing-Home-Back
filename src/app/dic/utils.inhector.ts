@@ -5,10 +5,8 @@ import { Bcrypt } from '../../context/shared/infrastructure/bcrypt.crypt';
 import { JWT } from '../../context/shared/infrastructure/jsonwebtoken.jwt';
 import { FormFileUploader } from '../../context/shared/infrastructure/multer.fileUploader';
 
-import {
-  NodeMailer,
-  TransporterMailer,
-} from '../../context/shared/infrastructure/nodemailer.mailer';
+import { NodeMailer, TransporterMailer } from '../../context/shared/infrastructure/nodemailer.mailer';
+import { SharpImageResizer } from '../../context/shared/infrastructure/SharpImageResizer';
 import { UuidGenerator } from '../../context/shared/infrastructure/uuidGenerator';
 
 import { enviroment } from '../config/enviroment';
@@ -22,16 +20,14 @@ export const enum UtilDependencies {
   FileUploader = 'FileUploader',
   FileDeleter = 'FileDeleter',
   ImageDeleter = 'ImageDeleter',
+  ImageResizer = 'ImageResizer',
 }
 
 export const injectUtils = (container: IOC): IOC => {
   container.setService(UtilDependencies.JWT, () => new JWT());
   container.setService(UtilDependencies.Crypt, () => new Bcrypt());
-
-  container.setService(
-    UtilDependencies.UuidGenerator,
-    () => new UuidGenerator()
-  );
+  container.setService(UtilDependencies.UuidGenerator, () => new UuidGenerator());
+  container.setService(UtilDependencies.ImageResizer, () => new SharpImageResizer());
 
   const mailerTransport: TransporterMailer = {
     auth: {
@@ -41,17 +37,12 @@ export const injectUtils = (container: IOC): IOC => {
     port: Number(enviroment.mailer.port),
     service: 'gmail',
   };
-  container.setService(
-    UtilDependencies.Mailer,
-    () => new NodeMailer(mailerTransport)
-  );
-
+  container.setService(UtilDependencies.Mailer, () => new NodeMailer(mailerTransport));
   container.setService(UtilDependencies.FileDeleter, () => new FileDeleter());
 
   container.setService(
     UtilDependencies.ImageDeleter,
-    (c) =>
-      new ImageDeleter(c.get(Repositories.ImageRepository), new FileDeleter())
+    (c) => new ImageDeleter(c.get(Repositories.ImageRepository), new FileDeleter())
   );
 
   container.setService(
