@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
@@ -21,6 +21,6 @@ const JobSchema = new Schema({
 });
 
 export const JobMongoModel: mongoose.Model<any, any, any> = mongoose.model(
-  'job',
+  "job",
   JobSchema
 );

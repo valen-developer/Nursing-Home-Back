@@ -1,13 +1,14 @@
-import { IOC } from 'dic-ioc';
-import { injectActivityUsesCases } from './activityUsesCases.injector';
-import { injectInstalationUsesCases } from './instalationUsesCases.injector';
-import { injectJobUsesCases } from './jobUsesCases.injector';
-import { injectMenuUsesCases } from './menuUsesCases.injector';
-import { injectPlateUsesCases } from './plateUsesCases.injector';
-import { injectRepositories } from './repositories.injector';
-import { injectUserUsesCases } from './userUsesCases.injector';
+import { IOC } from "dic-ioc";
+import { injectActivityUsesCases } from "./activityUsesCases.injector";
+import { injectInstalationUsesCases } from "./instalationUsesCases.injector";
+import { injectJobUsesCases } from "./jobUsesCases.injector";
+import { injectMenuUsesCases } from "./menuUsesCases.injector";
+import { injectNewsUsesCases } from "./newsUsesCases.injector";
+import { injectPlateUsesCases } from "./plateUsesCases.injector";
+import { injectRepositories } from "./repositories.injector";
+import { injectUserUsesCases } from "./userUsesCases.injector";
 
-import { injectUtils } from './utils.inhector';
+import { injectUtils } from "./utils.inhector";
 
 export const getContainer = (): IOC => {
   let container = new IOC();
@@ -35,6 +36,9 @@ export const getContainer = (): IOC => {
 
   // Menu use cases
   container = injectMenuUsesCases(container);
+
+  // News use cases
+  container = injectNewsUsesCases(container);
 
   return container;
 };

@@ -3,7 +3,7 @@ export class HTTPException implements Error {
   public readonly message: string;
   public readonly statusCode: number;
 
-  constructor(name: string, message: string, statusCode: number) {
+  constructor(name = "error", message: string, statusCode: number) {
     this.name = name;
     this.message = message;
     this.statusCode = statusCode;
