@@ -31,6 +31,22 @@ const NewsSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updater: {
+    type: String,
+    required: true,
+  },
+  updaterName: {
+    type: String,
+    required: true,
+  },
+  publishingState: {
+    type: String,
+    required: true,
+  },
   imagePaths: {
     type: [String],
   },

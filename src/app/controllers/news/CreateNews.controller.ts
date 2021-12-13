@@ -7,19 +7,17 @@ import { News, NewsObject } from "../../../context/News/domain/News.model";
 import { FileDeleter } from "../../../context/shared/application/fileDeleter";
 import { HTTPException } from "../../../context/shared/domain/httpException";
 import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
+import { UserFinder } from "../../../context/User/application/UserFinder";
 import { errorHandler } from "../../../helpers/errorHandler";
 import { enviroment } from "../../config/enviroment";
 import { NewsUsesCases } from "../../dic/newsUsesCases.injector";
+import { UserUsesCases } from "../../dic/userUsesCases.injector";
 import { UtilDependencies } from "../../dic/utils.inhector";
 import { Controller } from "../controller.interface";
 
 export class CreateNewsController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
     const { uuid: creatorUud } = req.body;
-    console.log(
-      "🚀 ~ file: CreateNews.controller.ts ~ line 19 ~ CreateNewsController ~ run ~ creatorUud",
-      creatorUud
-    );
 
     const uploadDir = enviroment.publicFolder;
 
@@ -36,7 +34,6 @@ export class CreateNewsController implements Controller {
 
         try {
           const newsObject = fields as unknown as NewsObject;
-
           const isCreator = newsObject.own === creatorUud;
           if (!isCreator)
             throw new HTTPException(
@@ -45,10 +42,21 @@ export class CreateNewsController implements Controller {
               401
             );
 
+          const userFinder: UserFinder = container.get(
+            UserUsesCases.UserFinder
+          );
+          const owner = await userFinder.getUser(creatorUud);
+
           const fileArray =
             files.file instanceof Array ? files.file : [files.file];
 
-          const news = new News(newsObject);
+          const news = new News({
+            ...newsObject,
+            own: owner.uuid.value,
+            ownName: owner.name.value,
+            publishingState: "UNPUBLISHED",
+          });
+
           // save images
           const fileUploader: FileUploader = container.get(
             UtilDependencies.FileUploader

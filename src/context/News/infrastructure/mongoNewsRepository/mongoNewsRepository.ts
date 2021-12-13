@@ -43,7 +43,7 @@ export class MongoNewsRepository implements NewsRepository {
   async updateNews(news: News): Promise<void> {
     try {
       return NewsMongoModel.findOneAndUpdate(
-        { uuid: news.uuid },
+        { uuid: news.uuid.value },
         news.toObject()
       );
     } catch (error) {

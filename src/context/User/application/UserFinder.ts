@@ -1,6 +1,6 @@
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { UserRepository } from '../domain/interfaces/user.repository';
-import { User } from '../domain/user.model';
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { UserRepository } from "../domain/interfaces/user.repository";
+import { User } from "../domain/user.model";
 
 export class UserFinder {
   constructor(
@@ -23,7 +23,7 @@ export class UserFinder {
   public async getAll(): Promise<User[]> {
     return await this.userRepository.getAll().then(async (users) => {
       console.log(
-        '🚀 -> UserFinder -> returnawaitthis.userRepository.getAll -> users',
+        "🚀 -> UserFinder -> returnawaitthis.userRepository.getAll -> users",
         users
       );
       const userWithImage = await Promise.all(
@@ -32,7 +32,7 @@ export class UserFinder {
         })
       );
       console.log(
-        '🚀 -> UserFinder -> returnawaitthis.userRepository.getAll -> userWithImage',
+        "🚀 -> UserFinder -> returnawaitthis.userRepository.getAll -> userWithImage",
         userWithImage
       );
 
