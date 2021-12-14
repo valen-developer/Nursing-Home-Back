@@ -1,12 +1,13 @@
-import { NewsPublishStateFactory } from "./NewsPublishStateFactory";
-
-export type AllowedNewsPublishStates = "PUBLISHED" | "UNPUBLISHED";
+import {
+  AllowedNewsPublishStates,
+  NewsPublishStateFactory,
+} from "./NewsPublishStateFactory";
 
 export abstract class NewsPublishState {
   protected PUBLISHED: AllowedNewsPublishStates =
     NewsPublishStateFactory.PUBLISHED;
   protected UNPUBLISHED: AllowedNewsPublishStates =
-    NewsPublishStateFactory.UNPUBLISHED;
+    NewsPublishStateFactory.DRAFT;
 
   constructor() {}
 

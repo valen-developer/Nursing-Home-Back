@@ -1,17 +1,17 @@
-import { Request, Response } from 'express';
-import { container } from '../../..';
-import { Mailer } from '../../../context/shared/domain/interfaces/mailer.interface';
-import { JWT } from '../../../context/shared/infrastructure/jsonwebtoken.jwt';
-import { UserCreator } from '../../../context/User/application/UserCreator';
-import { UserEliminator } from '../../../context/User/application/UserEliminator';
-import { User } from '../../../context/User/domain/user.model';
-import { UserPassword } from '../../../context/User/domain/valueObject/UserPassword.valueObject';
-import { errorHandler } from '../../../helpers/errorHandler';
-import { enviroment } from '../../config/enviroment';
-import { UserUsesCases } from '../../dic/userUsesCases.injector';
-import { UtilDependencies } from '../../dic/utils.inhector';
+import { Request, Response } from "express";
+import { container } from "../../..";
+import { Mailer } from "../../../context/shared/domain/interfaces/mailer.interface";
+import { JWT } from "../../../context/shared/infrastructure/jsonwebtoken.jwt";
+import { UserCreator } from "../../../context/User/application/UserCreator";
+import { UserEliminator } from "../../../context/User/application/UserEliminator";
+import { User } from "../../../context/User/domain/user.model";
+import { UserPassword } from "../../../context/User/domain/valueObject/UserPassword.valueObject";
+import { errorHandler } from "../../../helpers/errorHandler";
+import { enviroment } from "../../config/enviroment";
+import { UserUsesCases } from "../../dic/userUsesCases.injector";
+import { UtilDependencies } from "../../dic/utils.inhector";
 
-import { Controller } from '../controller.interface';
+import { Controller } from "../controller.interface";
 
 export class SignupController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -22,7 +22,7 @@ export class SignupController implements Controller {
         uuid,
         name,
         email,
-        role: 'USER_ROLE',
+        role: "USER_ROLE",
         validated: false,
       });
       const userCreator: UserCreator = container.get(UserUsesCases.UserCreator);
@@ -39,8 +39,12 @@ export class SignupController implements Controller {
       const isMailSent = await mailer.sendMail(
         enviroment.mailer.appMail,
         email,
-        'Registro en Retamal Centro de día',
+        "Registro en Retamal Centro de día",
         `Regístrese en el siguiente enlace: <a href="${enviroment.appUrl}/auth/validate-user/${token}">Regístrese</a>`
+      );
+      console.log(
+        "🚀 ~ file: signup.controller.ts ~ line 44 ~ SignupController ~ run ~ enviroment.appUrl",
+        enviroment.appUrl
       );
 
       if (isMailSent) {
@@ -55,10 +59,10 @@ export class SignupController implements Controller {
 
       res.status(500).json({
         ok: false,
-        error: 'user don´t created',
+        error: "user don´t created",
       });
     } catch (error) {
-      errorHandler(res, error, 'Signup controller');
+      errorHandler(res, error, "Signup controller");
     }
   }
 }

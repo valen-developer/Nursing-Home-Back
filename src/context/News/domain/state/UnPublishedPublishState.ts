@@ -1,11 +1,9 @@
 import { BasePublishState } from "./BaseNewsPublishState";
-import {
-  AllowedNewsPublishStates,
-  NewsPublishState,
-} from "./NewsPublishState.interface";
+import { NewsPublishState } from "./NewsPublishState.interface";
+import { AllowedNewsPublishStates } from "./NewsPublishStateFactory";
 import { PublishedPublishState } from "./PublishedPublishState";
 
-export class UnPublishedPublishState extends BasePublishState {
+export class DraftPublishState extends BasePublishState {
   publish(): NewsPublishState {
     return new PublishedPublishState();
   }

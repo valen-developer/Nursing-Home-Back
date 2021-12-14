@@ -1,13 +1,11 @@
 import { BasePublishState } from "./BaseNewsPublishState";
-import {
-  AllowedNewsPublishStates,
-  NewsPublishState,
-} from "./NewsPublishState.interface";
-import { UnPublishedPublishState } from "./UnPublishedPublishState";
+import { NewsPublishState } from "./NewsPublishState.interface";
+import { AllowedNewsPublishStates } from "./NewsPublishStateFactory";
+import { DraftPublishState } from "./UnPublishedPublishState";
 
 export class PublishedPublishState extends BasePublishState {
   unPublish(): NewsPublishState {
-    return new UnPublishedPublishState();
+    return new DraftPublishState();
   }
 
   isPublished(): boolean {

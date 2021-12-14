@@ -1,11 +1,11 @@
 import { ImagePath } from "../../shared/domain/valueObject/imagePath.valueObject";
 import { UUID } from "../../shared/domain/valueObject/uuid.valueObject";
+import { NewsPublishState } from "./state/NewsPublishState.interface";
 import {
   AllowedNewsPublishStates,
-  NewsPublishState,
-} from "./state/NewsPublishState.interface";
-import { NewsPublishStateFactory } from "./state/NewsPublishStateFactory";
-import { UnPublishedPublishState } from "./state/UnPublishedPublishState";
+  NewsPublishStateFactory,
+} from "./state/NewsPublishStateFactory";
+import { DraftPublishState } from "./state/UnPublishedPublishState";
 import { NewsContent } from "./valueObjects/newsContent.valueObject";
 import { NewsDate } from "./valueObjects/newsDate.valueObject";
 import { NewsOwnName } from "./valueObjects/newsOwnName.valueObject";

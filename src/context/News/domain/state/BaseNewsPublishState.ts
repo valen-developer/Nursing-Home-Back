@@ -1,8 +1,6 @@
 import { HTTPException } from "../../../shared/domain/httpException";
-import {
-  AllowedNewsPublishStates,
-  NewsPublishState,
-} from "./NewsPublishState.interface";
+import { NewsPublishState } from "./NewsPublishState.interface";
+import { AllowedNewsPublishStates } from "./NewsPublishStateFactory";
 
 export class BasePublishState extends NewsPublishState {
   publish(): NewsPublishState {

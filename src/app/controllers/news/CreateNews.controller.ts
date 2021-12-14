@@ -54,7 +54,7 @@ export class CreateNewsController implements Controller {
             ...newsObject,
             own: owner.uuid.value,
             ownName: owner.name.value,
-            publishingState: "UNPUBLISHED",
+            publishingState: "DRAFT",
           });
 
           // save images
