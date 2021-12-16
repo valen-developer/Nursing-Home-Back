@@ -1,12 +1,12 @@
-import formidable, { File as FileForm } from 'formidable';
-import fs from 'fs';
-import path from 'path';
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { FileUploader } from '../domain/interfaces/fileUploader.interface';
-import { UuidGenerator } from './uuidGenerator';
+import formidable, { File as FileForm } from "formidable";
+import fs from "fs";
+import path from "path";
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { FileUploader } from "../domain/interfaces/fileUploader.interface";
+import { UuidGenerator } from "./uuidGenerator";
 
 export class FormFileUploader implements FileUploader {
-  public aviableExtensions: string[] = ['png', 'jpeg', 'jpg'];
+  public aviableExtensions: string[] = ["png", "jpeg", "jpg"];
   constructor(private uuidGenerator: UuidGenerator) {}
 
   /**
@@ -16,17 +16,21 @@ export class FormFileUploader implements FileUploader {
    * @param fileName
    * @param destinationPath
    */
-  public async upload(file: FileForm, fileName: string, destinationPath: string): Promise<string | null> {
+  public async upload(
+    file: FileForm,
+    fileName: string,
+    destinationPath: string
+  ): Promise<string | null> {
     if (!file) return null;
 
-    const fileExtension = this.extractExtension(file.name ?? '');
+    const fileExtension = this.extractExtension(file.name ?? "");
 
     if (!this.aviableExtensions.includes(fileExtension)) {
       fs.unlink(file.path, (err) => {
         console.log(err);
       });
 
-      return '';
+      return "";
     }
 
     const newPath = path.join(destinationPath, `${fileName}.${fileExtension}`);
@@ -49,7 +53,15 @@ export class FormFileUploader implements FileUploader {
     return `${fileName}.${fileExtension}`;
   }
 
-  public async uploadAll(files: FileForm[], fileName: string, destinationPath: string): Promise<string[]> {
+  public async uploadAll(
+    files: FileForm[],
+    fileName: string,
+    destinationPath: string
+  ): Promise<string[]> {
+    console.log(
+      "🚀 ~ file: multer.fileUploader.ts ~ line 53 ~ FormFileUploader ~ uploadAll ~ files",
+      files
+    );
     let imagePaths: string[] = [];
     await asyncForEach<formidable.File>(files, async (f, i) => {
       const ipath: string | null = await this.upload(
@@ -65,7 +77,7 @@ export class FormFileUploader implements FileUploader {
   }
 
   private extractExtension(fileName: string): string {
-    const parts = fileName.split('.');
+    const parts = fileName.split(".");
     const ext = parts[parts.length - 1];
 
     return ext;

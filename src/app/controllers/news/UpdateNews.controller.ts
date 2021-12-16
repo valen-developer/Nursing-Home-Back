@@ -71,10 +71,6 @@ export class UpdateNewsController implements Controller {
             NewsUsesCases.NewsUpdater
           );
           await newsUpdater.update(updatedNews).catch((err) => {
-            console.log(
-              "🚀 ~ file: UpdateNews.controller.ts ~ line 64 ~ UpdateNewsController ~ form.parse ~ err",
-              err
-            );
             imagePaths.forEach((path) =>
               fileDeleter.byNameMatch(uploadDir, path)
             );

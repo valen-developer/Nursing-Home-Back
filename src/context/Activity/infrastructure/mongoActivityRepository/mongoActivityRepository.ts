@@ -1,7 +1,7 @@
-import { HTTPException } from '../../../shared/domain/httpException';
-import { Activity, ActivityObject } from '../../domain/activity.model';
-import { ActivityRepository } from '../../domain/interfaces/ActivityRepository.interface';
-import { ActivityMongoModel } from './mongoActivity.model';
+import { HTTPException } from "../../../shared/domain/httpException";
+import { Activity, ActivityObject } from "../../domain/activity.model";
+import { ActivityRepository } from "../../domain/interfaces/ActivityRepository.interface";
+import { ActivityMongoModel } from "./mongoActivity.model";
 
 export class MongoActivityRepository implements ActivityRepository {
   constructor() {}
@@ -10,10 +10,6 @@ export class MongoActivityRepository implements ActivityRepository {
     try {
       const activitiesObject: ActivityObject[] =
         await ActivityMongoModel.find().exec();
-      console.log(
-        '🚀 -> MongoActivityRepository -> getAll -> activitiesObject',
-        activitiesObject
-      );
 
       return activitiesObject.map((activity) => new Activity(activity));
     } catch (error) {
@@ -31,8 +27,8 @@ export class MongoActivityRepository implements ActivityRepository {
       return new Activity(activityMongo);
     } catch (error) {
       throw new HTTPException(
-        'mongo activity repository: get',
-        'activity not found',
+        "mongo activity repository: get",
+        "activity not found",
         404
       );
     }
@@ -47,15 +43,15 @@ export class MongoActivityRepository implements ActivityRepository {
       const keyPattern = error.keyPattern;
       if (!keyPattern) {
         throw new HTTPException(
-          'mongo activity repository:save ',
-          'server error',
+          "mongo activity repository:save ",
+          "server error",
           500
         );
       }
 
       const keys = Object.keys(keyPattern);
       throw new HTTPException(
-        'mongo activity repository:save ',
+        "mongo activity repository:save ",
         `${keys[0]} already exist`,
         400
       );
@@ -68,17 +64,13 @@ export class MongoActivityRepository implements ActivityRepository {
         { uuid: activity.uuid.value },
         activity.toObject()
       );
-      console.log(
-        '🚀 -> MongoActivityRepository -> update -> response',
-        response
-      );
 
       return activity;
     } catch (error) {
       console.log(error);
       throw new HTTPException(
-        'mongo activity repository: update',
-        'activity can´t be updated',
+        "mongo activity repository: update",
+        "activity can´t be updated",
         400
       );
     }

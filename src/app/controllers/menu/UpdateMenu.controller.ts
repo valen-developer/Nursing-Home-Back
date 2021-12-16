@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
-import { ParamsDictionary } from 'express-serve-static-core';
-import { ParsedQs } from 'qs';
-import { container } from '../../..';
-import { MenuFinder } from '../../../context/Menu/application/MenuFinder';
-import { MenuUpdater } from '../../../context/Menu/application/MenuUpdater';
-import { Menu } from '../../../context/Menu/domain/Menu.model';
-import { PlateFinder } from '../../../context/Plate/application/PlateFinder';
-import { PlateUpdater } from '../../../context/Plate/application/PlateUpdater';
-import { Plate } from '../../../context/Plate/domain/plate.model';
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { errorHandler } from '../../../helpers/errorHandler';
-import { MenuUsesCasesInjector } from '../../dic/menuUsesCases.injector';
-import { PlateUsesCases } from '../../dic/plateUsesCases.injector';
-import { Controller } from '../controller.interface';
+import { Request, Response } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
+import { container } from "../../..";
+import { MenuFinder } from "../../../context/Menu/application/MenuFinder";
+import { MenuUpdater } from "../../../context/Menu/application/MenuUpdater";
+import { Menu } from "../../../context/Menu/domain/Menu.model";
+import { PlateFinder } from "../../../context/Plate/application/PlateFinder";
+import { PlateUpdater } from "../../../context/Plate/application/PlateUpdater";
+import { Plate } from "../../../context/Plate/domain/plate.model";
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { errorHandler } from "../../../helpers/errorHandler";
+import { MenuUsesCasesInjector } from "../../dic/menuUsesCases.injector";
+import { PlateUsesCases } from "../../dic/plateUsesCases.injector";
+import { Controller } from "../controller.interface";
 
 export class UpdateMenuController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -29,7 +29,6 @@ export class UpdateMenuController implements Controller {
 
       const menu = await menuFinder.findByUuid(uuid);
 
-
       const menuUpdated = new Menu({
         uuid: menu.uuid.value,
         title,
@@ -39,9 +38,12 @@ export class UpdateMenuController implements Controller {
       await menuUpdater.update(menuUpdated);
       menuUpdated.addPlates(menu.plates);
 
-
-      const plateFinder: PlateFinder = container.get(PlateUsesCases.PlateFinder);
-      const plateUpdater: PlateUpdater = container.get(PlateUsesCases.PlateUpdater);
+      const plateFinder: PlateFinder = container.get(
+        PlateUsesCases.PlateFinder
+      );
+      const plateUpdater: PlateUpdater = container.get(
+        PlateUsesCases.PlateUpdater
+      );
       const plates = await plateFinder.findByMenu(menu.uuid.value);
       const updatedPlates: Plate[] = [];
 
@@ -55,24 +57,22 @@ export class UpdateMenuController implements Controller {
           menuUuid: menuUpdated.uuid.value,
           date: new Date(newDate),
           receipe: plate.receipe.value,
-          imagePaths: plate.imagePaths,
+          imagePaths: [],
         });
 
         await plateUpdater.updatePlate(updatedPlate);
         updatedPlates.push(updatedPlate);
-
-      })
+      });
 
       menuUpdated.clearPlates();
       menuUpdated.addPlates(updatedPlates);
-
 
       res.json({
         ok: true,
         menu: menuUpdated.toObject(),
       });
     } catch (error) {
-      errorHandler(res, error, 'update menu controller');
+      errorHandler(res, error, "update menu controller");
     }
   }
 }

@@ -42,10 +42,6 @@ export class SignupController implements Controller {
         "Registro en Retamal Centro de día",
         `Regístrese en el siguiente enlace: <a href="${enviroment.appUrl}/auth/validate-user/${token}">Regístrese</a>`
       );
-      console.log(
-        "🚀 ~ file: signup.controller.ts ~ line 44 ~ SignupController ~ run ~ enviroment.appUrl",
-        enviroment.appUrl
-      );
 
       if (isMailSent) {
         res.status(201).json({ ok: true, token });

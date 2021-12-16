@@ -22,18 +22,10 @@ export class UserFinder {
 
   public async getAll(): Promise<User[]> {
     return await this.userRepository.getAll().then(async (users) => {
-      console.log(
-        "🚀 -> UserFinder -> returnawaitthis.userRepository.getAll -> users",
-        users
-      );
       const userWithImage = await Promise.all(
         users.map(async (user) => {
           return await this.setUserImage(user);
         })
-      );
-      console.log(
-        "🚀 -> UserFinder -> returnawaitthis.userRepository.getAll -> userWithImage",
-        userWithImage
       );
 
       return userWithImage;

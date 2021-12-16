@@ -1,7 +1,7 @@
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { Instalation } from '../domain/instalation.model';
-import { InstalationRepository } from '../domain/interfaces/instalation.respository';
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { Instalation } from "../domain/instalation.model";
+import { InstalationRepository } from "../domain/interfaces/instalation.respository";
 
 export class InstalationFinder {
   constructor(
@@ -24,10 +24,7 @@ export class InstalationFinder {
 
     await asyncForEach<Instalation>(instalation, async (a) => {
       const images = await this.imageRepository.getByEntityUuid(a.uuid.value);
-      console.log(
-        '🚀 -> InstalationFinder -> awaitasyncForEach<Instalation> -> images',
-        images
-      );
+
       a.setImages(images.map((i) => i.path.value));
     });
 
