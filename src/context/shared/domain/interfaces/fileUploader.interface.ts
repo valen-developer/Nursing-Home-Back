@@ -18,4 +18,6 @@ export abstract class FileUploader {
     fileName: string,
     destinationPath: string
   ): Promise<string[]>;
+
+  public abstract extractExtension(fileName: string): string;
 }

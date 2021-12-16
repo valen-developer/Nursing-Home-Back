@@ -58,10 +58,6 @@ export class FormFileUploader implements FileUploader {
     fileName: string,
     destinationPath: string
   ): Promise<string[]> {
-    console.log(
-      "🚀 ~ file: multer.fileUploader.ts ~ line 53 ~ FormFileUploader ~ uploadAll ~ files",
-      files
-    );
     let imagePaths: string[] = [];
     await asyncForEach<formidable.File>(files, async (f, i) => {
       const ipath: string | null = await this.upload(
@@ -76,7 +72,7 @@ export class FormFileUploader implements FileUploader {
     return imagePaths;
   }
 
-  private extractExtension(fileName: string): string {
+  public extractExtension(fileName: string): string {
     const parts = fileName.split(".");
     const ext = parts[parts.length - 1];
 
