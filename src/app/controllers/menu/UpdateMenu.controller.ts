@@ -49,7 +49,8 @@ export class UpdateMenuController implements Controller {
 
       await asyncForEach<Plate>(plates, async (plate) => {
         const plateHour = plate.date.value.getHours();
-        const newDate = new Date(date).setHours(plateHour);
+        const plateMinutes = plate.date.value.getMinutes();
+        const newDate = new Date(date).setHours(plateHour, plateMinutes);
         const updatedPlate = new Plate({
           uuid: plate.uuid.value,
           name: plate.name.value,
