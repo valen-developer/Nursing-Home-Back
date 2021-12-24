@@ -1,10 +1,10 @@
-import { asyncMap } from '../../../helpers/asyncMap';
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { Image } from '../../shared/domain/image.model';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { UuidGenerator } from '../../shared/infrastructure/uuidGenerator';
-import { Activity } from '../domain/activity.model';
-import { ActivityRepository } from '../domain/interfaces/ActivityRepository.interface';
+import { asyncMap } from "../../../helpers/asyncMap";
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { Image } from "../../shared/domain/image.model";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { UuidGenerator } from "../../shared/infrastructure/uuidGenerator";
+import { Activity } from "../domain/activity.model";
+import { ActivityRepository } from "../domain/interfaces/ActivityRepository.interface";
 
 export class ActivityCreator {
   constructor(
