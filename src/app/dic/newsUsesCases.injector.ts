@@ -45,7 +45,7 @@ export const injectNewsUsesCases = (container: IOC): IOC => {
     (c) =>
       new NewsPublisher(
         c.get(NewsUsesCases.NewsFinder),
-        c.get(NewsUsesCases.NewsCreator)
+        c.get(NewsUsesCases.NewsUpdater)
       )
   );
 

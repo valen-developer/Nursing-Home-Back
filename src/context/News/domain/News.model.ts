@@ -1,5 +1,6 @@
 import { ImagePath } from "../../shared/domain/valueObject/imagePath.valueObject";
 import { UUID } from "../../shared/domain/valueObject/uuid.valueObject";
+import { User } from "../../User/domain/user.model";
 import { NewsPublishState } from "./state/NewsPublishState.interface";
 import {
   AllowedNewsPublishStates,
@@ -16,13 +17,13 @@ export class News {
   public readonly uuid: UUID;
   public readonly own: UUID;
   public readonly ownName: NewsOwnName;
-  public readonly updater: UUID;
-  public readonly updaterName: NewsOwnName;
+  private _updater: UUID;
+  private _updaterName: NewsOwnName;
   public readonly title: NewsTitle;
   public readonly subtitle: NewsSubtitle;
   public readonly content: NewsContent;
   public readonly createdAt: NewsDate;
-  public readonly updatedAt: NewsDate;
+  private _updatedAt: NewsDate;
 
   public publishingState: NewsPublishState;
 
@@ -37,17 +38,33 @@ export class News {
       news.imagesPath?.map((imagePath) => new ImagePath(imagePath)) ?? [];
     this.own = new UUID(news.own);
     this.ownName = new NewsOwnName(news.ownName);
-    this.updater = new UUID(news.updater ?? news.own);
-    this.updaterName = new NewsOwnName(news.updaterName ?? news.ownName);
+    this._updater = new UUID(news.updater ?? news.own);
+    this._updaterName = new NewsOwnName(news.updaterName ?? news.ownName);
     this.createdAt = new NewsDate(news.createdAt ?? new Date());
-    this.updatedAt = new NewsDate(news.updatedAt ?? this.createdAt.value);
+    this._updatedAt = new NewsDate(news.updatedAt ?? this.createdAt.value);
 
     this.publishingState = NewsPublishStateFactory.create();
     this.setPublishingState(news.publishingState);
   }
 
+  get updater(): UUID {
+    return this._updater;
+  }
+  get updaterName(): NewsOwnName {
+    return this._updaterName;
+  }
+
+  get updatedAt(): NewsDate {
+    return this._updatedAt;
+  }
   get imagesPath(): string[] {
     return this._imagesPath.map((imagePath) => imagePath.value);
+  }
+
+  public updatedBy(updater: User): void {
+    this._updater = new UUID(updater.uuid.value);
+    this._updaterName = new NewsOwnName(updater.name.value);
+    this._updatedAt = new NewsDate(new Date());
   }
 
   private setPublishingState(state: AllowedNewsPublishStates) {
