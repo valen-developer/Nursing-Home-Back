@@ -14,6 +14,21 @@ export class MongoNewsRepository implements NewsRepository {
     }
   }
 
+  async filter(
+    query: any,
+    from = 0,
+    quantity = 20,
+    sort_by = "createdAt",
+    order = "asc"
+  ): Promise<News[]> {
+    return await NewsMongoModel.find(query)
+      .skip(from)
+      .limit(quantity)
+      .sort({
+        [sort_by]: order,
+      });
+  }
+
   async getNewsByUuid(uuid: string): Promise<News> {
     try {
       const newsObject: NewsObject = await NewsMongoModel.findOne({
@@ -53,5 +68,9 @@ export class MongoNewsRepository implements NewsRepository {
 
   async deleteNews(uuid: string): Promise<void> {
     await NewsMongoModel.findOneAndDelete({ uuid: uuid });
+  }
+
+  async count(query: any): Promise<number> {
+    return await NewsMongoModel.countDocuments(query);
   }
 }

@@ -27,7 +27,12 @@ export const injectNewsUsesCases = (container: IOC): IOC => {
 
   container.setService(
     NewsUsesCases.NewsFinder,
-    () => new NewsFinder(newsRepository, imageRepository)
+    (c) =>
+      new NewsFinder(
+        newsRepository,
+        imageRepository,
+        c.get(UtilDependencies.QueryBuilder)
+      )
   );
 
   container.setService(

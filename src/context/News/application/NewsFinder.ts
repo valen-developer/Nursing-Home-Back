@@ -1,14 +1,17 @@
 import { asyncForEach } from "../../../helpers/asynForeach";
 import { Image } from "../../shared/domain/image.model";
 import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { QueryBuilder } from "../../shared/domain/interfaces/QueryBuilder";
 import { UserFinder } from "../../User/application/UserFinder";
 import { NewsRepository } from "../domain/interfaces/newsRepository";
 import { News } from "../domain/News.model";
+import { NewsQueryParams } from "../domain/NewsQueryParams";
 
 export class NewsFinder {
   constructor(
     private newsRepository: NewsRepository,
-    private imagesRepository: ImageRepository
+    private imagesRepository: ImageRepository,
+    private queryBuilder: QueryBuilder
   ) {}
 
   async findAllNews(): Promise<News[]> {
@@ -31,5 +34,25 @@ export class NewsFinder {
 
   private async getImage(news: News): Promise<Image[]> {
     return await this.imagesRepository.getByEntityUuid(news.uuid.value);
+  }
+
+  public async filter(
+    query: NewsQueryParams,
+    from: number,
+    quantity: number,
+    sort_by: string,
+    order: "asc" | "desc"
+  ): Promise<News[]> {
+    return await this.newsRepository.filter(
+      this.queryBuilder.build(query),
+      from,
+      quantity,
+      sort_by,
+      order
+    );
+  }
+
+  public async count(query: NewsQueryParams): Promise<number> {
+    return await this.newsRepository.count(this.queryBuilder.build(query));
   }
 }

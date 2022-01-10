@@ -4,6 +4,7 @@ import { ImageDeleter } from "../../context/shared/application/imageDeleter";
 import { ImageDuplicator } from "../../context/shared/application/imageDuplicator";
 import { Bcrypt } from "../../context/shared/infrastructure/bcrypt.crypt";
 import { JWT } from "../../context/shared/infrastructure/jsonwebtoken.jwt";
+import { MongoQueryBuilder } from "../../context/shared/infrastructure/MongoQueryBuilder";
 import { FormFileUploader } from "../../context/shared/infrastructure/multer.fileUploader";
 
 import {
@@ -26,6 +27,7 @@ export const enum UtilDependencies {
   ImageDeleter = "ImageDeleter",
   ImageResizer = "ImageResizer",
   ImageDuplicator = "ImageDuplicator",
+  QueryBuilder = "QueryBuilder",
 }
 
 export const injectUtils = (container: IOC): IOC => {
@@ -72,6 +74,11 @@ export const injectUtils = (container: IOC): IOC => {
         c.get(Repositories.ImageRepository),
         c.get(UtilDependencies.FileUploader)
       )
+  );
+
+  container.setService(
+    UtilDependencies.QueryBuilder,
+    () => new MongoQueryBuilder()
   );
 
   return container;
