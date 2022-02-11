@@ -2,6 +2,7 @@ import { IOC } from "dic-ioc";
 import { FileDeleter } from "../../context/shared/application/fileDeleter";
 import { ImageDeleter } from "../../context/shared/application/imageDeleter";
 import { ImageDuplicator } from "../../context/shared/application/imageDuplicator";
+import { RandomImageFinder } from "../../context/shared/application/RandomImageFinder";
 import { Bcrypt } from "../../context/shared/infrastructure/bcrypt.crypt";
 import { JWT } from "../../context/shared/infrastructure/jsonwebtoken.jwt";
 import { MongoQueryBuilder } from "../../context/shared/infrastructure/MongoQueryBuilder";
@@ -27,6 +28,7 @@ export const enum UtilDependencies {
   ImageDeleter = "ImageDeleter",
   ImageResizer = "ImageResizer",
   ImageDuplicator = "ImageDuplicator",
+  RandomImageFinder = "RandomImageFinder",
   QueryBuilder = "QueryBuilder",
 }
 
@@ -74,6 +76,11 @@ export const injectUtils = (container: IOC): IOC => {
         c.get(Repositories.ImageRepository),
         c.get(UtilDependencies.FileUploader)
       )
+  );
+
+  container.setService(
+    UtilDependencies.RandomImageFinder,
+    (c) => new RandomImageFinder(c.get(Repositories.ImageRepository))
   );
 
   container.setService(

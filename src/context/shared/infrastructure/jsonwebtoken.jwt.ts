@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import { IJWT } from '../domain/interfaces/jwt.interfaces';
+import jwt from "jsonwebtoken";
+import { IJWT } from "../domain/interfaces/jwt.interfaces";
 
 export class JWT implements IJWT {
   decode(
@@ -13,6 +13,7 @@ export class JWT implements IJWT {
     | null {
     return jwt.decode(token, options);
   }
+
   sign(
     payload: string | object | Buffer,
     secret: string,
@@ -20,12 +21,17 @@ export class JWT implements IJWT {
   ): string {
     return jwt.sign(payload, secret, { ...options });
   }
+
   verify(token: string, secret: string, options?: object): boolean {
     if (!token) return false;
-    const jwtResponse = jwt.verify(token, secret, options);
 
-    if (!jwtResponse) return false;
+    try {
+      const jwtResponse = jwt.verify(token, secret, options);
+      if (!jwtResponse) return false;
 
-    return true;
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

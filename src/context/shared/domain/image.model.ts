@@ -1,5 +1,5 @@
-import { ImagePath } from './valueObject/imagePath.valueObject';
-import { UUID } from './valueObject/uuid.valueObject';
+import { ImagePath } from "./valueObject/imagePath.valueObject";
+import { UUID } from "./valueObject/uuid.valueObject";
 
 export class Image {
   public readonly uuid: UUID;
