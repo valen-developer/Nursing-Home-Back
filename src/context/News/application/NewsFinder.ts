@@ -43,13 +43,20 @@ export class NewsFinder {
     sort_by: string,
     order: "asc" | "desc"
   ): Promise<News[]> {
-    return await this.newsRepository.filter(
+    const news = await this.newsRepository.filter(
       this.queryBuilder.build(query),
       from,
       quantity,
       sort_by,
       order
     );
+
+    await asyncForEach<News>(news, async (n) => {
+      const images = await this.getImage(n);
+      n.setImages(images.map((i) => i.path.value));
+    });
+
+    return news;
   }
 
   public async count(query: NewsQueryParams): Promise<number> {

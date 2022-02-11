@@ -2,6 +2,7 @@ import { IOC } from "dic-ioc";
 import { NewsCreator } from "../../context/News/application/NewsCreator";
 import { NewsDeleter } from "../../context/News/application/NewsDeleter";
 import { NewsFinder } from "../../context/News/application/NewsFinder";
+import { NewsPublishedFinder } from "../../context/News/application/NewsPublishedFinder";
 import { NewsPublisher } from "../../context/News/application/NewsPublisher";
 import { NewsUpdater } from "../../context/News/application/NewsUpdater";
 import { Repositories } from "./repositories.injector";
@@ -10,6 +11,7 @@ import { UtilDependencies } from "./utils.inhector";
 export enum NewsUsesCases {
   NewsCreator = "NewsCreator",
   NewsFinder = "NewsFinder",
+  NewsPublishedFinder = "NewsPublishedFinder",
   NewsUpdater = "NewsUpdater",
   NewsDeleter = "NewsDeleter",
   NewsPublisher = "NewsPublisher",
@@ -52,6 +54,11 @@ export const injectNewsUsesCases = (container: IOC): IOC => {
         c.get(NewsUsesCases.NewsFinder),
         c.get(NewsUsesCases.NewsUpdater)
       )
+  );
+
+  container.setService(
+    NewsUsesCases.NewsPublishedFinder,
+    (c) => new NewsPublishedFinder(c.get(NewsUsesCases.NewsFinder))
   );
 
   return container;

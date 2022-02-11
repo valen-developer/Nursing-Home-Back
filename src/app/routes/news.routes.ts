@@ -3,6 +3,7 @@ import { CreateNewsController } from "../controllers/news/CreateNews.controller"
 import { DeleteNewsController } from "../controllers/news/DeleteNews.controller";
 import { GetAllNewsController } from "../controllers/news/GetAllNews.controller";
 import { GetNewController } from "../controllers/news/GetNew.controller";
+import { GetPublishedNewsController } from "../controllers/news/GetPublishedNews.controller";
 import { PublishNewsController } from "../controllers/news/PublishNews.controller";
 import { UnPublishNewsController } from "../controllers/news/UnPublishNews.controller";
 import { UpdateNewsController } from "../controllers/news/UpdateNews.controller";
@@ -30,6 +31,7 @@ newsRouter.put("/:uuid", [verifyToken.run, verifyRole.run], updateNews.run);
 newsRouter.delete("/:uuid", [verifyToken.run, verifyRole.run], deleteNews.run);
 
 newsRouter.get("/all", getAllNews.run);
+newsRouter.get("/published", new GetPublishedNewsController().run);
 newsRouter.get("/:uuid", getNews.run);
 
 newsRouter.post(

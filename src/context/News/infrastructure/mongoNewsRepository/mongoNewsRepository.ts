@@ -21,12 +21,14 @@ export class MongoNewsRepository implements NewsRepository {
     sort_by = "createdAt",
     order = "asc"
   ): Promise<News[]> {
-    return await NewsMongoModel.find(query)
+    const newsDTO: NewsObject[] = await NewsMongoModel.find(query)
       .skip(from)
       .limit(quantity)
       .sort({
         [sort_by]: order,
       });
+
+    return newsDTO.map((news: NewsObject) => new News(news));
   }
 
   async getNewsByUuid(uuid: string): Promise<News> {
