@@ -5,8 +5,14 @@ import { NewsFinder } from "./NewsFinder";
 export class NewsPublishedFinder {
   constructor(private newsFinder: NewsFinder) {}
 
-  public async findAll(page: number = 1): Promise<News[]> {
-    const query: NewsQueryParams = {
+  public async findAll(
+    page: number = 1,
+    sort_by: string = "createdAt",
+    order: "asc" | "desc" = "desc",
+    query: NewsQueryParams = {}
+  ): Promise<News[]> {
+    const fixedQuery: NewsQueryParams = {
+      ...query,
       publishingState_equal: "PUBLISHED",
     };
 
@@ -15,11 +21,11 @@ export class NewsPublishedFinder {
     const from = (normalizedPage - 1) * quantity;
 
     return await this.newsFinder.filter(
-      query,
+      fixedQuery,
       from,
       quantity,
-      "createdAt",
-      "desc"
+      sort_by,
+      order
     );
   }
 

@@ -30,11 +30,13 @@ export class GetAllNewsController implements Controller {
       );
 
       const count = await newsFinder.count(query);
+      const pages = Math.ceil(count / quantity);
 
       res.status(200).json({
         ok: true,
         news: news.map((n) => n.toObject()),
         count: count,
+        pages: pages,
       });
     } catch (error) {
       errorHandler(res, error, "get all news controller");
