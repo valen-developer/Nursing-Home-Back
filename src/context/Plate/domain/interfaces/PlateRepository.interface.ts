@@ -1,7 +1,7 @@
-import { Plate } from '../plate.model';
+import { Plate } from "../plate.model";
 
 export abstract class PlateRepository {
-  abstract getPlates(): Promise<Plate[]>;
+  abstract getPlates(query: any): Promise<Plate[]>;
   abstract getPlatesByDate(date: Date): Promise<Plate[]>;
   abstract getPlatesByMenu(menuUuid: string): Promise<Plate[]>;
   abstract getPlate(uuid: string): Promise<Plate>;

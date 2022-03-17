@@ -1,19 +1,19 @@
-import { IOC } from 'dic-ioc';
-import { PlateCreator } from '../../context/Plate/application/PlateCreator';
-import { PlateDeleter } from '../../context/Plate/application/PlateDeleter';
-import { PlateFinder } from '../../context/Plate/application/PlateFinder';
-import { PlateUpdater } from '../../context/Plate/application/PlateUpdater';
-import { PlateRepository } from '../../context/Plate/domain/interfaces/PlateRepository.interface';
-import { ImageRepository } from '../../context/shared/domain/interfaces/image.repository';
-import { UuidGenerator } from '../../context/shared/infrastructure/uuidGenerator';
-import { Repositories } from './repositories.injector';
-import { UtilDependencies } from './utils.inhector';
+import { IOC } from "dic-ioc";
+import { PlateCreator } from "../../context/Plate/application/PlateCreator";
+import { PlateDeleter } from "../../context/Plate/application/PlateDeleter";
+import { PlateFinder } from "../../context/Plate/application/PlateFinder";
+import { PlateUpdater } from "../../context/Plate/application/PlateUpdater";
+import { PlateRepository } from "../../context/Plate/domain/interfaces/PlateRepository.interface";
+import { ImageRepository } from "../../context/shared/domain/interfaces/image.repository";
+import { UuidGenerator } from "../../context/shared/infrastructure/uuidGenerator";
+import { Repositories } from "./repositories.injector";
+import { UtilDependencies } from "./utils.inhector";
 
 export enum PlateUsesCases {
-  PlateFinder = 'PlateFinder',
-  PlateCreator = 'PlateCreator',
-  PlateUpdater = 'PlateUpdater',
-  PlateDeleter = 'PlateDeleter',
+  PlateFinder = "PlateFinder",
+  PlateCreator = "PlateCreator",
+  PlateUpdater = "PlateUpdater",
+  PlateDeleter = "PlateDeleter",
 }
 
 export const injectPlateUsesCases = (container: IOC): IOC => {
@@ -29,7 +29,12 @@ export const injectPlateUsesCases = (container: IOC): IOC => {
 
   container.setService(
     PlateUsesCases.PlateFinder,
-    () => new PlateFinder(plateRepository, imageRepository)
+    (c) =>
+      new PlateFinder(
+        plateRepository,
+        imageRepository,
+        c.get(UtilDependencies.QueryBuilder)
+      )
   );
 
   container.setService(

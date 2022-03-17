@@ -1,16 +1,20 @@
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { PlateRepository } from '../domain/interfaces/PlateRepository.interface';
-import { Plate } from '../domain/plate.model';
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { QueryBuilder } from "../../shared/domain/interfaces/QueryBuilder";
+import { PlateRepository } from "../domain/interfaces/PlateRepository.interface";
+import { Plate } from "../domain/plate.model";
+import { PlateQuery } from "../domain/PlateQueryParams";
 
 export class PlateFinder {
   constructor(
     private plateRepository: PlateRepository,
-    private imageRepository: ImageRepository
+    private imageRepository: ImageRepository,
+    private queryBuilder: QueryBuilder
   ) {}
 
-  public async findAll(): Promise<Plate[]> {
-    const plates = await this.plateRepository.getPlates();
+  public async findAll(query: PlateQuery): Promise<Plate[]> {
+    const queryBuilt = this.queryBuilder.build(query);
+    const plates = await this.plateRepository.getPlates(queryBuilt);
 
     await asyncForEach<Plate>(plates, async (plate) => {
       const images = await this.imageRepository.getByEntityUuid(
