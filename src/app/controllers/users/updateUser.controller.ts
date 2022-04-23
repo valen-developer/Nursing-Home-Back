@@ -1,17 +1,17 @@
-import { Request, Response } from 'express';
-import formidable from 'formidable';
-import { container } from '../../..';
-import { FileDeleter } from '../../../context/shared/application/fileDeleter';
-import { ImageDeleter } from '../../../context/shared/application/imageDeleter';
-import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
-import { UserFinder } from '../../../context/User/application/UserFinder';
-import { UserUpdater } from '../../../context/User/application/UserUpdater';
-import { User } from '../../../context/User/domain/user.model';
-import { errorHandler } from '../../../helpers/errorHandler';
-import { enviroment } from '../../config/enviroment';
-import { UserUsesCases } from '../../dic/userUsesCases.injector';
-import { UtilDependencies } from '../../dic/utils.inhector';
-import { Controller } from '../controller.interface';
+import { Request, Response } from "express";
+import formidable from "formidable";
+import { container } from "../../..";
+import { FileDeleter } from "../../../context/shared/application/fileDeleter";
+import { ImageDeleter } from "../../../context/shared/application/imageDeleter";
+import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
+import { UserFinder } from "../../../context/User/application/UserFinder";
+import { UserUpdater } from "../../../context/User/application/UserUpdater";
+import { User } from "../../../context/User/domain/user.model";
+import { errorHandler } from "../../../helpers/errorHandler";
+import { enviroment } from "../../config/enviroment";
+import { UserUsesCases } from "../../dic/userUsesCases.injector";
+import { UtilDependencies } from "../../dic/utils.inhector";
+import { Controller } from "../controller.interface";
 
 export class UpdateUserController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -27,7 +27,7 @@ export class UpdateUserController implements Controller {
 
     try {
       form.parse(req, async (err, fields, files) => {
-        if (err) throw new Error('server error');
+        if (err) throw new Error("server error");
 
         try {
           // dependencies
@@ -55,25 +55,30 @@ export class UpdateUserController implements Controller {
           const user = await userFinder.getUser(uuid);
 
           // delete old image
-          if (user.image)
+          if (user.image?.value && file) {
+            console.log("Hay imagen");
             await imageDeleter.deleteByEntityUuid(
               user.uuid.value,
               destinationFolder
             );
+          }
 
-          const imagePath = await fileUploader.upload(
-            file,
-            user.uuid.value,
-            destinationFolder
-          );
+          const imagePath =
+            file &&
+            (await fileUploader.upload(
+              file,
+              user.uuid.value,
+              destinationFolder
+            ));
 
           const updatedUser = new User({
             uuid: user.uuid.value,
-            name: name as string,
-            email: email as string,
+            name: (name as string) ?? user.name.value,
+            email: (email as string) ?? user.email.value,
             image: imagePath,
             role: user.role.value,
             validated: user.validated,
+            password: user.password.value ?? undefined,
           });
 
           await userUpdater.update(updatedUser).catch((err) => {
@@ -86,11 +91,11 @@ export class UpdateUserController implements Controller {
             user: updatedUser.toObjectWithoutPassword(),
           });
         } catch (error) {
-          errorHandler(res, error, 'update user controller');
+          errorHandler(res, error, "update user controller");
         }
       });
     } catch (error) {
-      errorHandler(res, error, 'update user controller');
+      errorHandler(res, error, "update user controller");
     }
   }
 }

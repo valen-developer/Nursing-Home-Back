@@ -1,13 +1,15 @@
-import { enviroment } from '../../../app/config/enviroment';
-import { Image } from '../../shared/domain/image.model';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { UuidGenerator } from '../../shared/infrastructure/uuidGenerator';
-import { UserRepository } from '../domain/interfaces/user.repository';
-import { User } from '../domain/user.model';
+import { enviroment } from "../../../app/config/enviroment";
+import { Image } from "../../shared/domain/image.model";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { UuidGenerator } from "../../shared/infrastructure/uuidGenerator";
+import { UserRepository } from "../domain/interfaces/user.repository";
+import { UserCacheRepository } from "../domain/interfaces/UserCacheRepository.interface";
+import { User } from "../domain/user.model";
 
 export class UserUpdater {
   constructor(
     private userRepository: UserRepository,
+    private userCacheRepository: UserCacheRepository,
     private imageRepository: ImageRepository,
     private uuid: UuidGenerator
   ) {}
@@ -25,6 +27,7 @@ export class UserUpdater {
     });
 
     await this.imageRepository.create(image);
+    await this.userCacheRepository.deleteUser(user.uuid.value);
 
     return updatedUser;
   }

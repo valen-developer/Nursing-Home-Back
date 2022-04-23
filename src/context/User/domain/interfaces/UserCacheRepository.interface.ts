@@ -1,6 +1,7 @@
-import { User, UserObject } from '../user.model';
+import { User, UserObject } from "../user.model";
 
 export abstract class UserCacheRepository {
   public abstract getUserByEmail(email: string): Promise<UserObject | null>;
   public abstract setUser(user: User): Promise<boolean>;
+  public abstract deleteUser(uuid: string): Promise<boolean>;
 }

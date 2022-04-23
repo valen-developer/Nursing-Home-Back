@@ -1,9 +1,9 @@
-import { HTTPException } from '../../../shared/domain/httpException';
+import { HTTPException } from "../../../shared/domain/httpException";
 
-import { UserRepository } from '../../domain/interfaces/user.repository';
-import { User, UserObject } from '../../domain/user.model';
+import { UserRepository } from "../../domain/interfaces/user.repository";
+import { User, UserObject } from "../../domain/user.model";
 
-import { UserMongoModel } from './MongoUserModel';
+import { UserMongoModel } from "./MongoUserModel";
 
 export class MongoUserRepository implements UserRepository {
   public async save(user: User): Promise<void> {
@@ -15,15 +15,15 @@ export class MongoUserRepository implements UserRepository {
       const keyPattern = error.keyPattern;
       if (!keyPattern) {
         throw new HTTPException(
-          'mongo user repository:save ',
-          'server error',
+          "mongo user repository:save ",
+          "server error",
           500
         );
       }
 
       const keys = Object.keys(keyPattern);
       throw new HTTPException(
-        'mongo user repository:save ',
+        "mongo user repository:save ",
         `${keys[0]} already exist`,
         400
       );
@@ -49,8 +49,8 @@ export class MongoUserRepository implements UserRepository {
     } catch (error) {
       console.log(error);
       throw new HTTPException(
-        'mongo user repository: update',
-        'user can´t be updated',
+        "mongo user repository: update",
+        "user can´t be updated",
         400
       );
     }
@@ -63,8 +63,8 @@ export class MongoUserRepository implements UserRepository {
       return new User(userMongo);
     } catch (error) {
       throw new HTTPException(
-        'mongo user repository: get',
-        'user not found',
+        "mongo user repository: get",
+        "user not found",
         404
       );
     }
@@ -77,8 +77,8 @@ export class MongoUserRepository implements UserRepository {
       return new User(userMongo);
     } catch (error) {
       throw new HTTPException(
-        'mongo user repository: get',
-        'user not found',
+        "mongo user repository: get",
+        "user not found",
         404
       );
     }
