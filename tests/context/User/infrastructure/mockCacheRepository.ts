@@ -1,10 +1,13 @@
-import { UserCacheRepository } from '../../../../src/context/User/domain/interfaces/UserCacheRepository.interface';
+import { UserCacheRepository } from "../../../../src/context/User/domain/interfaces/UserCacheRepository.interface";
 import {
   UserObject,
   User,
-} from '../../../../src/context/User/domain/user.model';
+} from "../../../../src/context/User/domain/user.model";
 
 export class MockUserCacheRepository implements UserCacheRepository {
+  public deleteUser(uuid: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
   private database: databaseObject[] = [];
 
   public async getUserByEmail(email: string): Promise<UserObject | null> {

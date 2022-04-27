@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { DeleteImageController } from "../controllers/images/deleteImage.controller";
 import { DeleteImageByEntityController } from "../controllers/images/deleteImageByEntity.controller";
-import { GetRandomImageController } from "../controllers/images/GetRandomImage";
 import { VerifyROLEMiddleware } from "../middlewares/verifyRole.middleware";
 import { VerifyTokenMiddleware } from "../middlewares/verifyToken.middleware";
 
@@ -25,5 +24,3 @@ imageRouter.delete(
   [verifyToken.run, verifyRole.run],
   deleteImageByentity.run
 );
-
-imageRouter.get("/random", new GetRandomImageController().run);

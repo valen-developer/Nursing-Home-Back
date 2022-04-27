@@ -14,7 +14,7 @@ export class MongoQueryBuilder implements QueryBuilder {
       const property = keyOption.split("_")[0];
 
       if (keyOption.includes("contains")) {
-        filter[property] = { $regex: `.*${value}.*`, $options: "i" };
+        filter[property] = { $regex: `.*${value.trim()}.*`, $options: "i" };
       }
 
       if (keyOption.includes("equal")) {

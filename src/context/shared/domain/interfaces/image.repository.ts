@@ -5,5 +5,4 @@ export abstract class ImageRepository {
   abstract getByEntityUuid(entityUuid: string): Promise<Image[]>;
   abstract delete(uuid: string): Promise<ImageObject | undefined>;
   abstract deleteAllByEntity(entityUuid: string): Promise<ImageObject[]>;
-  abstract findRandomImage(): Promise<Image>;
 }
