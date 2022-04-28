@@ -6,7 +6,9 @@ import { NewsCreator } from "../../../context/News/application/NewsCreator";
 import { News, NewsObject } from "../../../context/News/domain/News.model";
 import { FileDeleter } from "../../../context/shared/application/fileDeleter";
 import { HTTPException } from "../../../context/shared/domain/httpException";
+import { Image } from "../../../context/shared/domain/image.model";
 import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
+import { UuidGenerator } from "../../../context/shared/infrastructure/uuidGenerator";
 import { UserFinder } from "../../../context/User/application/UserFinder";
 import { errorHandler } from "../../../helpers/errorHandler";
 import { enviroment } from "../../config/enviroment";
@@ -67,8 +69,19 @@ export class CreateNewsController implements Controller {
             uploadDir
           );
 
-          news.setImages(imagePaths);
-
+          const uuidGenerator: UuidGenerator = container.get(
+            UtilDependencies.UuidGenerator
+          );
+          news.setImages(
+            imagePaths.map(
+              (i) =>
+                new Image({
+                  path: i,
+                  entityUuid: news.uuid.value,
+                  uuid: uuidGenerator.generate(),
+                })
+            )
+          );
           const fileDeleter: FileDeleter = container.get(
             UtilDependencies.FileDeleter
           );

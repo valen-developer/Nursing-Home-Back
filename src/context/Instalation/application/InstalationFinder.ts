@@ -14,7 +14,7 @@ export class InstalationFinder {
     const images = await this.imageRepository.getByEntityUuid(
       instalation.uuid.value
     );
-    instalation.setImages(images.map((i) => i.path.value));
+    instalation.setImages(images);
 
     return instalation;
   }
@@ -25,7 +25,7 @@ export class InstalationFinder {
     await asyncForEach<Instalation>(instalation, async (a) => {
       const images = await this.imageRepository.getByEntityUuid(a.uuid.value);
 
-      a.setImages(images.map((i) => i.path.value));
+      a.setImages(images);
     });
 
     return instalation;

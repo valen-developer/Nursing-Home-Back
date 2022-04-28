@@ -1,7 +1,7 @@
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { Activity } from '../domain/activity.model';
-import { ActivityRepository } from '../domain/interfaces/ActivityRepository.interface';
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { Activity } from "../domain/activity.model";
+import { ActivityRepository } from "../domain/interfaces/ActivityRepository.interface";
 
 export class ActivityFinder {
   constructor(
@@ -14,7 +14,7 @@ export class ActivityFinder {
     const images = await this.imageRepository.getByEntityUuid(
       activity.uuid.value
     );
-    activity.setImages(images.map((i) => i.path.value));
+    activity.setImages(images);
 
     return activity;
   }
@@ -24,7 +24,7 @@ export class ActivityFinder {
 
     await asyncForEach<Activity>(activities, async (a) => {
       const images = await this.imageRepository.getByEntityUuid(a.uuid.value);
-      a.setImages(images.map((i) => i.path.value));
+      a.setImages(images);
     });
 
     return activities;

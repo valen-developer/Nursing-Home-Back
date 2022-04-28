@@ -2,7 +2,6 @@ import { asyncForEach } from "../../../helpers/asynForeach";
 import { Image } from "../../shared/domain/image.model";
 import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
 import { QueryBuilder } from "../../shared/domain/interfaces/QueryBuilder";
-import { UserFinder } from "../../User/application/UserFinder";
 import { NewsRepository } from "../domain/interfaces/newsRepository";
 import { News } from "../domain/News.model";
 import { NewsQueryParams } from "../domain/NewsQueryParams";
@@ -19,7 +18,7 @@ export class NewsFinder {
 
     await asyncForEach<News>(news, async (n) => {
       const images = await this.getImage(n);
-      n.setImages(images.map((i) => i.path.value));
+      n.setImages(images);
     });
 
     return news;
@@ -28,7 +27,7 @@ export class NewsFinder {
   async findNewsByUuid(uuid: string): Promise<News> {
     const news = await this.newsRepository.getNewsByUuid(uuid);
     const images = await this.getImage(news);
-    news.setImages(images.map((i) => i.path.value));
+    news.setImages(images);
     return news;
   }
 
@@ -53,7 +52,7 @@ export class NewsFinder {
 
     await asyncForEach<News>(news, async (n) => {
       const images = await this.getImage(n);
-      n.setImages(images.map((i) => i.path.value));
+      n.setImages(images);
     });
 
     return news;

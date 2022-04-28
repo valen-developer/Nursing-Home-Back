@@ -1,18 +1,20 @@
-import { Request, Response } from 'express';
-import formidable from 'formidable';
-import fs from 'fs';
+import { Request, Response } from "express";
+import formidable from "formidable";
+import fs from "fs";
 
-import { container } from '../../..';
-import { InstalationFinder } from '../../../context/Instalation/application/InstalationFinder';
-import { InstalationUpdater } from '../../../context/Instalation/application/InstalationUpdater';
-import { Instalation } from '../../../context/Instalation/domain/instalation.model';
-import { FileUploader } from '../../../context/shared/domain/interfaces/fileUploader.interface';
-import { errorHandler } from '../../../helpers/errorHandler';
-import { enviroment } from '../../config/enviroment';
-import { InstalationUsesCases } from '../../dic/instalationUsesCases.injector';
-import { UtilDependencies } from '../../dic/utils.inhector';
+import { container } from "../../..";
+import { InstalationFinder } from "../../../context/Instalation/application/InstalationFinder";
+import { InstalationUpdater } from "../../../context/Instalation/application/InstalationUpdater";
+import { Instalation } from "../../../context/Instalation/domain/instalation.model";
+import { Image } from "../../../context/shared/domain/image.model";
+import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
+import { UuidGenerator } from "../../../context/shared/infrastructure/uuidGenerator";
+import { errorHandler } from "../../../helpers/errorHandler";
+import { enviroment } from "../../config/enviroment";
+import { InstalationUsesCases } from "../../dic/instalationUsesCases.injector";
+import { UtilDependencies } from "../../dic/utils.inhector";
 
-import { Controller } from '../controller.interface';
+import { Controller } from "../controller.interface";
 
 export class UpdateInstalationController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -27,7 +29,7 @@ export class UpdateInstalationController implements Controller {
 
     try {
       form.parse(req, async (err, fields, files) => {
-        if (err) throw new Error('server error');
+        if (err) throw new Error("server error");
         try {
           // get dependencies
           const instalationFinder: InstalationFinder = container.get(
@@ -58,12 +60,24 @@ export class UpdateInstalationController implements Controller {
             instalation.uuid.value,
             destinationFolder
           );
-          updatedInstalation.setImages(imagesPath);
+          const uuidGenerator: UuidGenerator = container.get(
+            UtilDependencies.UuidGenerator
+          );
+          updatedInstalation.setImages(
+            imagesPath.map(
+              (i) =>
+                new Image({
+                  path: i,
+                  entityUuid: updatedInstalation.uuid.value,
+                  uuid: uuidGenerator.generate(),
+                })
+            )
+          );
 
           await instalationUpdater.update(updatedInstalation).catch((err) => {
             imagesPath.forEach((path) => fs.unlinkSync(path));
 
-            throw new Error('server error');
+            throw new Error("server error");
           });
 
           res.json({
@@ -71,11 +85,11 @@ export class UpdateInstalationController implements Controller {
             instalation: updatedInstalation.toObject(),
           });
         } catch (error) {
-          errorHandler(res, error, 'update activity controller');
+          errorHandler(res, error, "update activity controller");
         }
       });
     } catch (error) {
-      errorHandler(res, error, 'update activity controller');
+      errorHandler(res, error, "update activity controller");
     }
   }
 }

@@ -63,4 +63,10 @@ export class MongoImageRepository implements ImageRepository {
 
     return images;
   }
+
+  async deleteByPath(path: string): Promise<ImageObject | undefined> {
+    const image = await ImageMongoModel.findOneAndDelete({ path });
+
+    return image;
+  }
 }

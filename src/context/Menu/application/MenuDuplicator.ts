@@ -70,7 +70,7 @@ export class MenuDuplicator {
       });
 
       const newImages = await this.duplicateImages(images, newPlate.uuid.value);
-      newPlate.setImages(newImages.map((i) => i.path.value));
+      newPlate.setImages(newImages);
       return newPlate;
     });
 

@@ -6,7 +6,9 @@ import { PlateFinder } from "../../../context/Plate/application/PlateFinder";
 import { PlateUpdater } from "../../../context/Plate/application/PlateUpdater";
 import { Plate, PlateObject } from "../../../context/Plate/domain/plate.model";
 import { FileDeleter } from "../../../context/shared/application/fileDeleter";
+import { Image } from "../../../context/shared/domain/image.model";
 import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
+import { UuidGenerator } from "../../../context/shared/infrastructure/uuidGenerator";
 import { errorHandler } from "../../../helpers/errorHandler";
 import { enviroment } from "../../config/enviroment";
 import { PlateUsesCases } from "../../dic/plateUsesCases.injector";
@@ -64,7 +66,19 @@ export class UpdatePlateController implements Controller {
           uploadDir
         );
 
-        updatedPlate.setImages(imagesPath);
+        const uuidGenerator: UuidGenerator = container.get(
+          UtilDependencies.UuidGenerator
+        );
+        updatedPlate.setImages(
+          imagesPath.map(
+            (i) =>
+              new Image({
+                path: i,
+                entityUuid: updatedPlate.uuid.value,
+                uuid: uuidGenerator.generate(),
+              })
+          )
+        );
 
         await plateUpdater.updatePlate(updatedPlate).catch((err) => {
           imagesPath.forEach((path) =>

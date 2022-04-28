@@ -1,13 +1,10 @@
-import { Request, Response } from 'express';
-import { container } from '../../..';
-import { ActivityEliminator } from '../../../context/Activity/application/ActivityEliminator';
-import { FileDeleter } from '../../../context/shared/application/fileDeleter';
-import { errorHandler } from '../../../helpers/errorHandler';
-import { enviroment } from '../../config/enviroment';
-import { ActivityUsesCases } from '../../dic/activityUsesCases.injector';
-import { UtilDependencies } from '../../dic/utils.inhector';
+import { Request, Response } from "express";
+import { container } from "../../..";
+import { ActivityEliminator } from "../../../context/Activity/application/ActivityEliminator";
+import { errorHandler } from "../../../helpers/errorHandler";
+import { ActivityUsesCases } from "../../dic/activityUsesCases.injector";
 
-import { Controller } from '../controller.interface';
+import { Controller } from "../controller.interface";
 
 export class DeleteActivityController implements Controller {
   public async run(req: Request, res: Response): Promise<void> {
@@ -21,7 +18,7 @@ export class DeleteActivityController implements Controller {
 
       res.json({ ok: true });
     } catch (error) {
-      errorHandler(res, error, 'delete activity controller');
+      errorHandler(res, error, "delete activity controller");
     }
   }
 }

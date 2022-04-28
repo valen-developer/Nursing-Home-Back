@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import formidable from "formidable";
-import fs from "fs";
 
 import { container } from "../../..";
 import { ActivityCreator } from "../../../context/Activity/application/ActivityCreator";
 import { Activity } from "../../../context/Activity/domain/activity.model";
 import { FileDeleter } from "../../../context/shared/application/fileDeleter";
+import { Image } from "../../../context/shared/domain/image.model";
 import { FileUploader } from "../../../context/shared/domain/interfaces/fileUploader.interface";
-import { IImageResizer } from "../../../context/shared/domain/interfaces/IimageResizer.interface";
+import { UuidGenerator } from "../../../context/shared/infrastructure/uuidGenerator";
 
 import { errorHandler } from "../../../helpers/errorHandler";
 import { enviroment } from "../../config/enviroment";
@@ -28,6 +28,10 @@ export class CreateActivityController implements Controller {
       form.parse(req, async (err, fields, files) => {
         try {
           if (err) throw new Error("server error");
+
+          const uuidGenerator: UuidGenerator = container.get(
+            UtilDependencies.UuidGenerator
+          );
 
           const fileDeleter: FileDeleter = container.get(
             UtilDependencies.FileDeleter
@@ -56,7 +60,16 @@ export class CreateActivityController implements Controller {
             destinationFolder
           );
 
-          activity.setImages(imagePaths);
+          activity.setImages(
+            imagePaths.map(
+              (i) =>
+                new Image({
+                  path: i,
+                  entityUuid: activity.uuid.value,
+                  uuid: uuidGenerator.generate(),
+                })
+            )
+          );
 
           // Create instalation
           const activityCreator: ActivityCreator = container.get(

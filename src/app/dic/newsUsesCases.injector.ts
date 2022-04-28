@@ -5,6 +5,9 @@ import { NewsFinder } from "../../context/News/application/NewsFinder";
 import { NewsPublishedFinder } from "../../context/News/application/NewsPublishedFinder";
 import { NewsPublisher } from "../../context/News/application/NewsPublisher";
 import { NewsUpdater } from "../../context/News/application/NewsUpdater";
+import { NewsRepository } from "../../context/News/domain/interfaces/newsRepository";
+import { ImageRepository } from "../../context/shared/domain/interfaces/image.repository";
+import { UuidGenerator } from "../../context/shared/infrastructure/uuidGenerator";
 import { Repositories } from "./repositories.injector";
 import { UtilDependencies } from "./utils.inhector";
 
@@ -18,9 +21,15 @@ export enum NewsUsesCases {
 }
 
 export const injectNewsUsesCases = (container: IOC): IOC => {
-  const uuidGenerator = container.get(UtilDependencies.UuidGenerator);
-  const imageRepository = container.get(Repositories.ImageRepository);
-  const newsRepository = container.get(Repositories.NewsRepository);
+  const uuidGenerator: UuidGenerator = container.get(
+    UtilDependencies.UuidGenerator
+  );
+  const imageRepository: ImageRepository = container.get(
+    Repositories.ImageRepository
+  );
+  const newsRepository: NewsRepository = container.get(
+    Repositories.NewsRepository
+  );
 
   container.setService(
     NewsUsesCases.NewsCreator,
@@ -44,7 +53,7 @@ export const injectNewsUsesCases = (container: IOC): IOC => {
 
   container.setService(
     NewsUsesCases.NewsDeleter,
-    () => new NewsDeleter(newsRepository, imageRepository)
+    (c) => new NewsDeleter(newsRepository, c.get(UtilDependencies.ImageDeleter))
   );
 
   container.setService(

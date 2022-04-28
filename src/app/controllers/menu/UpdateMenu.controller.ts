@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
 import { container } from "../../..";
 import { MenuFinder } from "../../../context/Menu/application/MenuFinder";
 import { MenuUpdater } from "../../../context/Menu/application/MenuUpdater";

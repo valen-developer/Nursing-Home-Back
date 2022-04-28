@@ -20,7 +20,7 @@ export class PlateFinder {
       const images = await this.imageRepository.getByEntityUuid(
         plate.uuid.value
       );
-      plate.setImages(images.map((image) => image.path.value));
+      plate.setImages(images);
     });
 
     return plates;
@@ -33,7 +33,7 @@ export class PlateFinder {
       const images = await this.imageRepository.getByEntityUuid(
         plate.uuid.value
       );
-      plate.setImages(images.map((image) => image.path.value));
+      plate.setImages(images);
     });
 
     return plates;
@@ -42,7 +42,7 @@ export class PlateFinder {
   public async findByUuid(uuid: string): Promise<Plate> {
     const plate = await this.plateRepository.getPlate(uuid);
     const images = await this.imageRepository.getByEntityUuid(plate.uuid.value);
-    plate.setImages(images.map((image) => image.path.value));
+    plate.setImages(images);
     return plate;
   }
 
@@ -55,7 +55,7 @@ export class PlateFinder {
       const images = await this.imageRepository.getByEntityUuid(
         plate.uuid.value
       );
-      plate.setImages(images.map((image) => image.path.value));
+      plate.setImages(images);
     });
 
     return plates;

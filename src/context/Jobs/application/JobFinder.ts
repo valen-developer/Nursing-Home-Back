@@ -1,7 +1,7 @@
-import { asyncForEach } from '../../../helpers/asynForeach';
-import { ImageRepository } from '../../shared/domain/interfaces/image.repository';
-import { JobRepository } from '../domain/interfaces/JobRepository.interface';
-import { Job } from '../domain/job.model';
+import { asyncForEach } from "../../../helpers/asynForeach";
+import { ImageRepository } from "../../shared/domain/interfaces/image.repository";
+import { JobRepository } from "../domain/interfaces/JobRepository.interface";
+import { Job } from "../domain/job.model";
 
 export class JobFinder {
   constructor(
@@ -12,7 +12,7 @@ export class JobFinder {
   public async get(uuid: string): Promise<Job> {
     const job = await this.jobRepository.get(uuid);
     const images = await this.imageRepository.getByEntityUuid(job.uuid.value);
-    job.setImages(images.map((i) => i.path.value));
+    job.setImages(images);
 
     return job;
   }
@@ -22,7 +22,7 @@ export class JobFinder {
 
     await asyncForEach<Job>(jobs, async (a) => {
       const images = await this.imageRepository.getByEntityUuid(a.uuid.value);
-      a.setImages(images.map((i) => i.path.value));
+      a.setImages(images);
     });
 
     return jobs;

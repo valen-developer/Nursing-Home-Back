@@ -1,3 +1,4 @@
+import { Image, ImageObject } from "../../shared/domain/image.model";
 import { ImagePath } from "../../shared/domain/valueObject/imagePath.valueObject";
 import { UUID } from "../../shared/domain/valueObject/uuid.valueObject";
 import { User } from "../../User/domain/user.model";
@@ -27,6 +28,7 @@ export class News {
 
   public publishingState: NewsPublishState;
 
+  private _images: Image[] = [];
   private _imagesPath: ImagePath[];
 
   constructor(news: NewsObject) {
@@ -61,6 +63,10 @@ export class News {
     return this._imagesPath.map((imagePath) => imagePath.value);
   }
 
+  get images(): Image[] {
+    return this._images;
+  }
+
   public updatedBy(updater: User): void {
     this._updater = new UUID(updater.uuid.value);
     this._updaterName = new NewsOwnName(updater.name.value);
@@ -79,8 +85,8 @@ export class News {
     this.publishingState = this.publishingState.unPublish();
   }
 
-  public setImages(imagesPath: string[]) {
-    this._imagesPath = imagesPath.map((imagePath) => new ImagePath(imagePath));
+  public setImages(images: Image[]) {
+    this._imagesPath = images.map((image) => image.path);
   }
 
   toObject(): NewsObject {
@@ -97,6 +103,7 @@ export class News {
       updater: this.updater.value,
       updaterName: this.updaterName.value,
       publishingState: this.publishingState.toString(),
+      images: this.images.map((image) => image.toObject()),
     };
   }
 }
@@ -107,11 +114,12 @@ export interface NewsObject {
   title: string;
   subtitle: string;
   content: string;
-  imagesPath: string[];
   own: string;
   ownName: string;
   updater?: string;
   updaterName?: string;
   createdAt: Date;
   updatedAt: Date;
+  imagesPath: string[];
+  images: ImageObject[];
 }
