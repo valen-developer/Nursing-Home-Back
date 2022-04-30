@@ -25,10 +25,11 @@ export class FormFileUploader implements FileUploader {
 
     const originalName = file.filepath;
 
-    const fileExtension = this.extractExtension(file.name ?? "");
+    const fileExtension = this.extractExtension(file.originalFilename ?? "");
 
     if (!this.aviableExtensions.includes(fileExtension)) {
       fs.unlink(originalName, (err) => {
+        if (!err) return;
         console.log(err);
       });
 
@@ -43,12 +44,14 @@ export class FormFileUploader implements FileUploader {
 
       if (exits) {
         fs.unlink(namePath, (err) => {
+          if (!err) return;
           throw new Error("Error on save file");
         });
       }
     });
 
     fs.rename(originalName, newPath, (err) => {
+      if (!err) return newPath;
       throw new Error("Error on save file");
     });
 
@@ -61,9 +64,9 @@ export class FormFileUploader implements FileUploader {
     destinationPath: string
   ): Promise<string[]> {
     let imagePaths: string[] = [];
-    await asyncForEach<formidable.File>(files, async (f, i) => {
+    await asyncForEach<formidable.File>(files, async (file, i) => {
       const ipath: string | null = await this.upload(
-        f,
+        file,
         `${fileName}-${this.uuidGenerator.generate()}`,
         destinationPath
       );
