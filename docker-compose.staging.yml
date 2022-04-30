@@ -13,7 +13,7 @@ services:
       - nursinghome
     environment:
       - DATABASE_URI=mongodb://mongo:27017/nursinghome
-      - REDIS_HOST=redis://admin:admin@redis:6379
+      - REDIS_HOST=redis://redis:6379
     restart: unless-stopped
 
   mongo:
