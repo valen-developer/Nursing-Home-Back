@@ -17,16 +17,18 @@ export class FormFileUploader implements FileUploader {
    * @param destinationPath
    */
   public async upload(
-    file: FileForm,
+    file: any,
     fileName: string,
     destinationPath: string
   ): Promise<string | null> {
     if (!file) return null;
 
+    const originalName = file.filepath;
+
     const fileExtension = this.extractExtension(file.name ?? "");
 
     if (!this.aviableExtensions.includes(fileExtension)) {
-      fs.unlink(file.path, (err) => {
+      fs.unlink(originalName, (err) => {
         console.log(err);
       });
 
@@ -41,13 +43,13 @@ export class FormFileUploader implements FileUploader {
 
       if (exits) {
         fs.unlink(namePath, (err) => {
-          console.log(err);
+          throw new Error("Error on save file");
         });
       }
     });
 
-    fs.rename(file.path, newPath, (err) => {
-      console.log(err);
+    fs.rename(originalName, newPath, (err) => {
+      throw new Error("Error on save file");
     });
 
     return `${fileName}.${fileExtension}`;
