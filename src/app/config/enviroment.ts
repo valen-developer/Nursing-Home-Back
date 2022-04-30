@@ -11,6 +11,7 @@ export const enviroment = {
     password: process.env.DATABASE_PASSWORD || "admin",
   },
   redis: {
+    host: process.env.REDIS_HOST || "localhost",
     password: process.env.REDIS_PASSWORD || "admin",
   },
   mailer: {

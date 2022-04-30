@@ -6,6 +6,11 @@ services:
     image: app
     ports:
       - 3000:3000
+    networks:
+      - nursinghome
+    environment:
+      - DATABASE_URI=http://mongo:27017/nursinghome
+      - REDIS_HOST=http://redis:6379
     restart: unless-stopped
 
   mongo:
@@ -14,6 +19,8 @@ services:
     restart: always
     ports:
       - 27017:27017
+    networks:
+      - nursinghome
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
@@ -38,3 +45,7 @@ services:
     command: redis-server --requirepass admin   
     ports:
       - '6379:6379'
+
+networks:
+  nursinghome:
+    driver: bridge
