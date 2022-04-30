@@ -12,8 +12,8 @@ services:
     networks:
       - nursinghome
     environment:
-      - DATABASE_URI=http://mongo:27017/nursinghome
-      - REDIS_HOST=http://redis:6379
+      - DATABASE_URI=http://172.16.238.10:27017/nursinghome
+      - REDIS_HOST=http://172.16.238.11:6379
     restart: unless-stopped
 
   mongo:
@@ -26,6 +26,7 @@ services:
       nursinghome:
         aliases:
           - mongo
+        ipv4_address: 172.16.238.10
 
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
@@ -51,6 +52,7 @@ services:
       nursinghome:
         aliases:
           - redis
+        ipv4_address: 172.16.238.11
     restart: always
     command: redis-server --requirepass admin   
     ports:
@@ -59,4 +61,7 @@ services:
 networks:
   nursinghome:
     driver: bridge
+    ipam:
+      config:
+        - subnet: "172.16.238.0/24"
       
