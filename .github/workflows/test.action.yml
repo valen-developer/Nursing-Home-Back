@@ -12,16 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: install dependencies
-        run: npm install
-
-      - name: build project
-        run: npm run build
-
       - name: build containers
-        run: docker-compose -f docker-compose.dev.yml up -d
-
-      - name: init app
-        run: npm start
+        run: docker-compose -f docker-compose.staging.yml up -d
       
 
