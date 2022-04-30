@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
-    
+
   mongo:
     image: mongo
     container_name: nursinghome-mongo
@@ -35,12 +35,6 @@ services:
     image: redis:alpine
     container_name: nursinghome-redis
     restart: always
-    command: redis-server --requirepass admin
-    volumes:
-      - redis/redis-data:/var/lib/redis
-      - redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server --requirepass admin   
     ports:
       - '6379:6379'
-
-volumes:
-  redis:
