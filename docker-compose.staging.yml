@@ -18,7 +18,7 @@ services:
 
   mongo:
     image: mongo
-    container_name: nursinghome-mongo
+    container_name: mongo
     restart: always
     ports:
       - 27017:27017
@@ -46,7 +46,7 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: nursinghome-redis
+    container_name: redis
     networks:
       nursinghome:
         aliases:
