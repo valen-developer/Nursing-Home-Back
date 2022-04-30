@@ -10,13 +10,7 @@ jobs:
   test1:    
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
-
-      - name: clean network
-        run: docker network rm nursinghome
-
-      - name: create app network
-        run: docker network create nursinghome
+      - uses: actions/checkout@v3   
 
       - name: build containers
         run: docker-compose -f docker-compose.staging.yml up -d
