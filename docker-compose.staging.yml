@@ -49,3 +49,5 @@ services:
 networks:
   nursinghome:
     driver: bridge
+    external: true
+      
