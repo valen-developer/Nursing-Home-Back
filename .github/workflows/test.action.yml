@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: clean network
+        run: docker network rm nursinghome
+
       - name: create app network
         run: docker network create nursinghome
 
