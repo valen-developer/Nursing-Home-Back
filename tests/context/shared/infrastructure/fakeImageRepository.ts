@@ -41,4 +41,15 @@ export class FakeImageRepository implements ImageRepository {
       resolve(images.map((i) => i.toObject()));
     });
   }
+
+  deleteByPath(path: string): Promise<ImageObject> {
+    const image = this._images.find((i) => i.path.value === path);
+    this._images = this._images.filter((i) => i.path.value !== path);
+
+    return new Promise((resolve, reject) => {
+      if (!image) return reject();
+
+      resolve(image.toObject());
+    });
+  }
 }
